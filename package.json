@@ -1,0 +1,42 @@
+{
+  "name": "freya",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "parcel build index.html",
+    "start": "parcel index.html",
+    "storybook": "parcel ./storybook.html --port 1337"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ant-design/icons": "^4.2.1",
+    "@reduxjs/toolkit": "^1.4.0",
+    "@types/styled-components": "^5.1.2",
+    "antd": "^4.5.1",
+    "immer": "^7.0.7",
+    "react": "^16.8.6",
+    "react-beautiful-dnd": "^13.0.0",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.2.1",
+    "react-use-scroll": "^1.0.3",
+    "react-uuid": "^1.0.2",
+    "styled-components": "^5.1.1"
+  },
+  "devDependencies": {
+    "@storybook/react": "^5.3.19",
+    "@types/node": "^10.7.0",
+    "@types/react": "^16.7.17",
+    "@types/react-beautiful-dnd": "^13.0.0",
+    "@types/react-dom": "^16.0.7",
+    "@types/react-redux": "^7.1.9",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "parcel-bundler": "^1.12.4",
+    "sass": "^1.26.10",
+    "typescript": "^3.9.1"
+  }
+}

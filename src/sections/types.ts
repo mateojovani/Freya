@@ -67,17 +67,17 @@ export interface SectionMovedAction extends Action {
 
 export interface SectionRowAddedAction extends Action {
   type: 'ADD_SECTION_ROW'
-  payload: { name: string, pos: number, copy: boolean }
+  payload: { name: string; pos: number; copy: boolean }
 }
 
 export interface SectionRowDeletedAction extends Action {
   type: 'DELETE_SECTION_ROW'
-  payload: { name: string, pos: number }
+  payload: { name: string; pos: number }
 }
 
 export interface SectionRowMovedAction extends Action {
   type: 'MOVE_SECTION_ROW'
-  payload: { name: string, row: string, pos: number }
+  payload: { name: string; row: string; pos: number }
 }
 
 export type SectionsAction =

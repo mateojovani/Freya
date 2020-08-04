@@ -4,8 +4,8 @@ import { DragOutlined, DeleteOutlined, CopyOutlined } from '@ant-design/icons'
 import { Button, Tooltip } from 'antd'
 
 type HandleProps = {
-  dragProps: any
-  size: 'middle' | 'small'
+  dragProps?: any
+  size?: 'middle' | 'small'
 }
 
 type ActionButtonProps = {
@@ -13,10 +13,10 @@ type ActionButtonProps = {
 }
 
 export const HandleComponent: React.FunctionComponent<HandleProps> = ({
-  dragProps,
-  size,
+  dragProps = {},
+  size = 'small',
 }) => (
-  <div {...dragProps} style={{ marginBottom: '5px' }}>
+  <div {...dragProps} data-testid="handle" style={{ marginBottom: '5px' }}>
     <Tooltip title="Drag to reorder">
       <Button type="dashed" icon={<DragOutlined />} size={size} />
     </Tooltip>

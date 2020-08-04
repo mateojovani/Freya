@@ -1,8 +1,13 @@
-import produce, { Draft } from 'immer'
-import uuid from 'react-uuid'
+import * as React from 'react'
+import { createStore, combineReducers } from 'redux'
+import { Provider } from 'react-redux'
+import { render } from '@testing-library/react'
 
-import { State, SectionsAction, FieldType } from './types'
+import sectionsReducer from './sections/reducer'
+import { State, FieldType, SectionsAction } from './sections/types'
+import { AppState } from './types'
 
+const reducers = combineReducers<AppState, SectionsAction>({sectionsView: sectionsReducer})
 const sectionsMockNormalised: State = {
   sections: {
     byId: {
@@ -153,74 +158,10 @@ const sectionsMockNormalised: State = {
   currentSectionId: 'bio',
 }
 
-export default produce((draft: Draft<State>, action: SectionsAction) => {
-  switch (action.type) {
-    case 'LOAD_SECTIONS': {
-      draft = action.payload
-      break
-    }
-    case 'SET_FIELD_VALUE': {
-      const { name, value } = action.payload
-      draft.fields.byId[name].value = value
-      break
-    }
-    case 'SET_CURRENT_SECTION': {
-      draft.currentSectionId = action.payload.section
-      break
-    }
-    case 'MOVE_SECTION': {
-      const { name, pos } = action.payload
-      const draggable = draft.sections.nonFixedIds
-      const currentIndex = draggable.indexOf(name)
-      const currentSection = draggable[pos]
-      draggable[pos] = name
-      draggable[currentIndex] = currentSection
-      draft.sections.allIds = [...draft.sections.fixedIds, ...draggable]
-      break
-    }
-    case 'ADD_SECTION_ROW': {
-      const { name, pos, copy } = action.payload
-      const section = draft.sections.byId[name]
-      const mirrorRowIdx = pos !== undefined ? pos : section.fields.length - 1
-      const sectionFields = section.fields[mirrorRowIdx].fields
-      const repeated = {
-        name: uuid(),
-        fields: sectionFields.map(() => uuid()),
-      }
-
-      section.fields.splice(mirrorRowIdx + 1, 0, repeated)
-      draft.fields.allIds = draft.fields.allIds.concat(repeated.fields)
-      repeated.fields.forEach((field, i) => {
-        const mirror = sectionFields[i]
-        draft.fields.byId[field] = {
-          ...draft.fields.byId[mirror],
-          name: field,
-          value: copy ? draft.fields.byId[mirror].value : '',
-        }
-      })
-      break
-    }
-    case 'DELETE_SECTION_ROW': {
-      const { name, pos } = action.payload
-      const section = draft.sections.byId[name]
-      const deletedFields = section.fields.splice(pos, 1)
-      deletedFields[0].fields.forEach((field) => {
-        delete draft.fields.byId[field]
-        draft.fields.allIds.splice(draft.fields.allIds.indexOf(field), 1)
-      })
-      break
-    }
-    case 'MOVE_SECTION_ROW': {
-      const { name, row, pos } = action.payload
-      const section = draft.sections.byId[name]
-      const movingRowIdx = section.fields.findIndex(
-        (fieldsRow) => fieldsRow.name === row
-      )
-      const currentRow = { ...section.fields[pos] }
-      const movingRow = { ...section.fields[movingRowIdx] }
-      section.fields[movingRowIdx] = currentRow
-      section.fields[pos] = movingRow
-      break
-    }
-  }
-}, sectionsMockNormalised)
+export const renderWithStore = (
+  Component,
+  state = { sectionsView: sectionsMockNormalised }
+) => {
+  const store = createStore(reducers, state)
+  return render(<Provider store={store}>{Component}</Provider>)
+}

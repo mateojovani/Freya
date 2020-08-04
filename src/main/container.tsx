@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Layout } from 'antd'
 
 import { AppHeader } from '../header/container'
-import { Sections } from '../sections/container'
+import { SectionsComponent } from '../sections/container'
 
 export const Main = () => {
   return (
@@ -10,7 +10,7 @@ export const Main = () => {
       <AppHeader />
 
       <Layout.Content style={{ padding: '0 50px', background: 'white' }}>
-        <Sections />
+        <SectionsComponent />
       </Layout.Content>
     </Layout>
   )

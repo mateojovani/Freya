@@ -44,6 +44,7 @@ const FieldComponent: FunctionComponent<FieldProps> = ({
       return (
         <Input.TextArea
           value={field.value}
+          id={field.name}
           placeholder={field.title}
           onChange={handleChangeMemo}
         />
@@ -52,6 +53,7 @@ const FieldComponent: FunctionComponent<FieldProps> = ({
       return (
         <Input
           value={field.value}
+          id={field.name}
           type={field.type}
           placeholder={field.title}
           onChange={handleChangeMemo}
@@ -93,7 +95,7 @@ const SectionComponent: FunctionComponent<SectionProps> = ({
   addSectionRow,
   duplicateSectionRow,
   deleteSectionRow,
-  moveSectionRow
+  moveSectionRow,
 }) => {
   const handleDragEnd = useCallback((result) => {
     if (!result.destination) {

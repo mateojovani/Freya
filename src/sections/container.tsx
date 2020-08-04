@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Dispatch, FunctionComponent, useCallback } from 'react'
+import { Dispatch, FunctionComponent } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { Typography, Row, Col } from 'antd'
@@ -41,15 +41,15 @@ const Actions = styled.div`
   z-index: 999;
 `
 
-export const Sections: FunctionComponent = () => {
+export const SectionsComponent: FunctionComponent = () => {
   const dispatch = useDispatch<Dispatch<SectionsAction>>()
   const { sections, fields } = useSelector<AppState, State>(
     ({ sectionsView }) => sectionsView
   )
 
-  const handleFieldChange = useCallback((field: string, value: string) => {
+  const handleFieldChange = (field: string, value: string) => {
     dispatch(setFieldValue(field, value))
-  }, [])
+  }
 
   const handleAddSectionRow = (name: string) => {
     return () => dispatch(addSectionRow(name))
@@ -68,7 +68,7 @@ export const Sections: FunctionComponent = () => {
       dispatch(moveSectionRow(name, row, pos))
   }
 
-  const handleDragEnd = useCallback((result) => {
+  const handleDragEnd = (result) => {
     if (!result.destination) {
       return
     }
@@ -78,7 +78,24 @@ export const Sections: FunctionComponent = () => {
     }
 
     dispatch(moveSection(result.draggableId, result.destination.index))
-  }, [])
+  }
+
+  const renderSection = (section: string) => (
+    <>
+      <SectionTitle title={sections.byId[section].title} />
+      <SectionComponentMemo
+        section={sections.byId[section]}
+        fields={fields}
+        fieldChange={handleFieldChange}
+        addSectionRow={handleAddSectionRow(sections.byId[section].name)}
+        duplicateSectionRow={handleDuplicateSectionRow(
+          sections.byId[section].name
+        )}
+        deleteSectionRow={handleDeleteSectionRow(sections.byId[section].name)}
+        moveSectionRow={handleMoveSectionRow(sections.byId[section].name)}
+      />
+    </>
+  )
 
   return (
     <Row gutter={[8, 8]}>
@@ -98,24 +115,7 @@ export const Sections: FunctionComponent = () => {
             <div style={{ padding: '20px 0px' }}>
               {sections.fixedIds.map((section) => (
                 <div key={section} id={section}>
-                  <SectionTitle title={sections.byId[section].title} />
-                  <SectionComponentMemo
-                    section={sections.byId[section]}
-                    fields={fields}
-                    fieldChange={handleFieldChange}
-                    addSectionRow={handleAddSectionRow(
-                      sections.byId[section].name
-                    )}
-                    duplicateSectionRow={handleDuplicateSectionRow(
-                      sections.byId[section].name
-                    )}
-                    deleteSectionRow={handleDeleteSectionRow(
-                      sections.byId[section].name
-                    )}
-                    moveSectionRow={handleMoveSectionRow(
-                      sections.byId[section].name
-                    )}
-                  />
+                  {renderSection(section)}
                 </div>
               ))}
               <DragDropContext onDragEnd={handleDragEnd}>
@@ -148,26 +148,7 @@ export const Sections: FunctionComponent = () => {
                                   size="small"
                                 />
                               </Actions>
-                              <SectionTitle
-                                title={sections.byId[section].title}
-                              />
-                              <SectionComponentMemo
-                                section={sections.byId[section]}
-                                fields={fields}
-                                fieldChange={handleFieldChange}
-                                addSectionRow={handleAddSectionRow(
-                                  sections.byId[section].name
-                                )}
-                                duplicateSectionRow={handleDuplicateSectionRow(
-                                  sections.byId[section].name
-                                )}
-                                deleteSectionRow={handleDeleteSectionRow(
-                                  sections.byId[section].name
-                                )}
-                                moveSectionRow={handleMoveSectionRow(
-                                  sections.byId[section].name
-                                )}
-                              />
+                              {renderSection(section)}
                             </div>
                           )}
                         </Draggable>

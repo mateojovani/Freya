@@ -8,7 +8,7 @@ import {
   SectionMovedAction,
   SectionRowAddedAction,
   SectionRowDeletedAction,
-  SectionRowMovedAction
+  SectionRowMovedAction,
 } from './types'
 
 export const loadSections: ActionCreator<SectionsLoadedAction> = (
@@ -42,21 +42,26 @@ export const moveSection: ActionCreator<SectionMovedAction> = (
 })
 
 export const addSectionRow: ActionCreator<SectionRowAddedAction> = (
-  name: string, pos?: number, copy?: boolean
+  name: string,
+  pos?: number,
+  copy?: boolean
 ) => ({
   type: 'ADD_SECTION_ROW',
   payload: { name, pos, copy },
 })
 
 export const deleteSectionRow: ActionCreator<SectionRowDeletedAction> = (
-  name: string, pos: number
+  name: string,
+  pos: number
 ) => ({
   type: 'DELETE_SECTION_ROW',
   payload: { name, pos },
 })
 
 export const moveSectionRow: ActionCreator<SectionRowMovedAction> = (
-  name: string, row: string, pos: number
+  name: string,
+  row: string,
+  pos: number
 ) => ({
   type: 'MOVE_SECTION_ROW',
   payload: { name, row, pos },

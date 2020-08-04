@@ -6,6 +6,10 @@
   "scripts": {
     "build": "parcel build index.html",
     "start": "parcel index.html",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "type-check": "tsc --noEmit",
+    "prettify": "prettier --write './src/**/*.{ts,tsx}'",
     "storybook": "parcel ./storybook.html --port 1337"
   },
   "author": "",
@@ -13,6 +17,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
     "@reduxjs/toolkit": "^1.4.0",
+    "@types/jest": "^26.0.8",
     "@types/styled-components": "^5.1.2",
     "antd": "^4.5.1",
     "immer": "^7.0.7",
@@ -22,10 +27,15 @@
     "react-redux": "^7.2.1",
     "react-use-scroll": "^1.0.3",
     "react-uuid": "^1.0.2",
+    "slate": "^0.58.4",
+    "slate-react": "^0.58.4",
     "styled-components": "^5.1.1"
   },
   "devDependencies": {
     "@storybook/react": "^5.3.19",
+    "@testing-library/jest-dom": "^5.11.2",
+    "@testing-library/react": "^10.4.7",
+    "@testing-library/user-event": "^12.1.0",
     "@types/node": "^10.7.0",
     "@types/react": "^16.7.17",
     "@types/react-beautiful-dnd": "^13.0.0",
@@ -35,8 +45,29 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "jest": "^26.2.2",
+    "jest-extended": "^0.11.5",
     "parcel-bundler": "^1.12.4",
+    "prettier": "^2.0.5",
     "sass": "^1.26.10",
+    "ts-jest": "^26.1.4",
     "typescript": "^3.9.1"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.ts"
+    ],
+    "moduleNameMapper": {
+      ".+\\.css$": "<rootDir>/src/styleMock.ts"
+    },
+    "testMatch": [
+      "**/?(*.)+(spec|test).(ts|tsx|js)"
+    ]
   }
 }

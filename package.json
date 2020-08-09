@@ -26,10 +26,10 @@
     "react-dom": "^16.8.6",
     "react-redux": "^7.2.1",
     "react-use-scroll": "^1.0.3",
-    "react-uuid": "^1.0.2",
     "slate": "^0.58.4",
     "slate-react": "^0.58.4",
-    "styled-components": "^5.1.1"
+    "styled-components": "^5.1.1",
+    "uuidv4": "^6.2.2"
   },
   "devDependencies": {
     "@storybook/react": "^5.3.19",

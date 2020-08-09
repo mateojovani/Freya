@@ -12,7 +12,7 @@ const fixedSectionMock: Section = {
   canMove: false,
   canRepeat: false,
   addLabel: 'Add section 1 row',
-  fields: [{ name: 'row', fields: ['fld_1', 'fld_2'] }],
+  fields: [{ name: 'row', fields: [['fld_1', 'fld_2']] }],
 }
 
 const dynamicSectionMock: Section = {
@@ -22,8 +22,8 @@ const dynamicSectionMock: Section = {
   canRepeat: true,
   addLabel: 'Add section 1 row',
   fields: [
-    { name: 'row_1', fields: ['fld_1', 'fld_2'] },
-    { name: 'row_2', fields: ['fld_3', 'fld_4'] },
+    { name: 'row_1', fields: [['fld_1', 'fld_2']] },
+    { name: 'row_2', fields: [['fld_3', 'fld_4']] },
   ],
 }
 

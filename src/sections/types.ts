@@ -2,7 +2,7 @@ import { Action } from 'redux'
 
 interface SectionFields {
   name: string
-  fields: string[]
+  fields: string[][]
 }
 
 export interface Section {
@@ -12,6 +12,17 @@ export interface Section {
   canRepeat: boolean
   addLabel: string
   fields: SectionFields[]
+}
+
+type FieldsRow = Field[][]
+
+export interface TemplateSection {
+  name: string
+  title: string
+  canMove: boolean
+  canRepeat: boolean
+  addLabel: string
+  fields: FieldsRow[]
 }
 
 export enum FieldType {
@@ -32,6 +43,10 @@ export interface Field {
 }
 
 export interface State {
+  templates: {
+    sections: TemplateSection[],
+    inUse: string[]
+  }
   sections: {
     byId: { [key: string]: Section }
     fixedIds: string[]
@@ -42,7 +57,6 @@ export interface State {
     byId: { [key: string]: Field }
     allIds: string[]
   }
-  currentSectionId: string
 }
 
 export interface SectionsLoadedAction extends Action {
@@ -52,38 +66,38 @@ export interface SectionsLoadedAction extends Action {
 
 export interface FieldValueSetAction extends Action {
   type: 'SET_FIELD_VALUE'
-  payload: { name: string; value: string }
+  payload: { id: string; value: string }
 }
 
-export interface CurrentSectionSetAction extends Action {
-  type: 'SET_CURRENT_SECTION'
-  payload: { section: string }
+export interface AddSectionAction extends Action {
+  type: 'ADD_SECTION'
+  payload: { templateIndex: number }
 }
 
 export interface SectionMovedAction extends Action {
   type: 'MOVE_SECTION'
-  payload: { name: string; pos: string }
+  payload: { id: string; pos: string }
 }
 
 export interface SectionRowAddedAction extends Action {
   type: 'ADD_SECTION_ROW'
-  payload: { name: string; pos: number; copy: boolean }
+  payload: { id: string; pos: number; copy: boolean }
 }
 
 export interface SectionRowDeletedAction extends Action {
   type: 'DELETE_SECTION_ROW'
-  payload: { name: string; pos: number }
+  payload: { id: string; pos: number }
 }
 
 export interface SectionRowMovedAction extends Action {
   type: 'MOVE_SECTION_ROW'
-  payload: { name: string; row: string; pos: number }
+  payload: { id: string; row: string; pos: number }
 }
 
 export type SectionsAction =
   | SectionsLoadedAction
   | FieldValueSetAction
-  | CurrentSectionSetAction
+  | AddSectionAction
   | SectionMovedAction
   | SectionRowAddedAction
   | SectionRowDeletedAction

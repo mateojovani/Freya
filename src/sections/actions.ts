@@ -4,7 +4,7 @@ import {
   State,
   SectionsLoadedAction,
   FieldValueSetAction,
-  CurrentSectionSetAction,
+  AddSectionAction,
   SectionMovedAction,
   SectionRowAddedAction,
   SectionRowDeletedAction,
@@ -19,50 +19,50 @@ export const loadSections: ActionCreator<SectionsLoadedAction> = (
 })
 
 export const setFieldValue: ActionCreator<FieldValueSetAction> = (
-  name: string,
+  id: string,
   value: string
 ) => ({
   type: 'SET_FIELD_VALUE',
-  payload: { name, value },
+  payload: { id, value },
 })
 
-export const setCurrentSection: ActionCreator<CurrentSectionSetAction> = (
-  section: string
+export const addSection: ActionCreator<AddSectionAction> = (
+  templateIndex: number
 ) => ({
-  type: 'SET_CURRENT_SECTION',
-  payload: { section },
+  type: 'ADD_SECTION',
+  payload: { templateIndex },
 })
 
 export const moveSection: ActionCreator<SectionMovedAction> = (
-  name: string,
+  id: string,
   pos: string
 ) => ({
   type: 'MOVE_SECTION',
-  payload: { name, pos },
+  payload: { id, pos },
 })
 
 export const addSectionRow: ActionCreator<SectionRowAddedAction> = (
-  name: string,
+  id: string,
   pos?: number,
   copy?: boolean
 ) => ({
   type: 'ADD_SECTION_ROW',
-  payload: { name, pos, copy },
+  payload: { id, pos, copy },
 })
 
 export const deleteSectionRow: ActionCreator<SectionRowDeletedAction> = (
-  name: string,
+  id: string,
   pos: number
 ) => ({
   type: 'DELETE_SECTION_ROW',
-  payload: { name, pos },
+  payload: { id, pos },
 })
 
 export const moveSectionRow: ActionCreator<SectionRowMovedAction> = (
-  name: string,
+  id: string,
   row: string,
   pos: number
 ) => ({
   type: 'MOVE_SECTION_ROW',
-  payload: { name, row, pos },
+  payload: { id, row, pos },
 })

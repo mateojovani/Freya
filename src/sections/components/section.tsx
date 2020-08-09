@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { FunctionComponent, useCallback } from 'react'
-import { Form, Input, Button } from 'antd'
+import { Row, Col, Form, Input, Button } from 'antd'
 import styled from 'styled-components'
 import { PlusOutlined } from '@ant-design/icons'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
@@ -24,17 +24,19 @@ type SectionProps = {
 }
 
 type FieldProps = {
+  id: string
   field: Field
-  handleChange: (name: string, value: string) => void
+  handleChange: (id: string, value: string) => void
 }
 
 const FieldComponent: FunctionComponent<FieldProps> = ({
+  id,
   field,
   handleChange,
 }) => {
   const handleChangeMemo = useCallback(
     (ev) => {
-      handleChange(field.name, ev.target.value)
+      handleChange(id, ev.target.value)
     },
     [field]
   )
@@ -44,8 +46,7 @@ const FieldComponent: FunctionComponent<FieldProps> = ({
       return (
         <Input.TextArea
           value={field.value}
-          id={field.name}
-          placeholder={field.title}
+          id={id}
           onChange={handleChangeMemo}
         />
       )
@@ -53,9 +54,8 @@ const FieldComponent: FunctionComponent<FieldProps> = ({
       return (
         <Input
           value={field.value}
-          id={field.name}
+          id={id}
           type={field.type}
-          placeholder={field.title}
           onChange={handleChangeMemo}
         />
       )
@@ -109,6 +109,26 @@ const SectionComponent: FunctionComponent<SectionProps> = ({
     moveSectionRow(result.draggableId, result.destination.index)
   }, [])
 
+  const renderSectionFields = (sectionFields: string[][]) =>
+    sectionFields.map((fieldsRow, i) => (
+      <Row key={i} gutter={[16, 0]}>
+        {fieldsRow.map((field) => (
+          <Col key={field} span={24 / fieldsRow.length}>
+            <Form.Item
+              name={fields.byId[field].name}
+              label={fields.byId[field].title}
+            >
+              <FieldComponentMemo
+                id={field}
+                field={fields.byId[field]}
+                handleChange={fieldChange}
+              />
+            </Form.Item>
+          </Col>
+        ))}
+      </Row>
+    ))
+
   return (
     <Form layout="vertical" style={{ marginBottom: '50px' }}>
       {section.canRepeat && section.fields.length > 1 ? (
@@ -144,18 +164,7 @@ const SectionComponent: FunctionComponent<SectionProps> = ({
                           />
                         </Actions>
 
-                        {sectionFields.map((field) => (
-                          <Form.Item
-                            key={field}
-                            name={fields.byId[field].name}
-                            label={fields.byId[field].title}
-                          >
-                            <FieldComponentMemo
-                              field={fields.byId[field]}
-                              handleChange={fieldChange}
-                            />
-                          </Form.Item>
-                        ))}
+                        {renderSectionFields(sectionFields)}
                       </FormRow>
                     )}
                   </Draggable>
@@ -166,20 +175,7 @@ const SectionComponent: FunctionComponent<SectionProps> = ({
           </Droppable>
         </DragDropContext>
       ) : (
-        <FormRow>
-          {section.fields[0].fields.map((field) => (
-            <Form.Item
-              key={field}
-              name={fields.byId[field].name}
-              label={fields.byId[field].title}
-            >
-              <FieldComponentMemo
-                field={fields.byId[field]}
-                handleChange={fieldChange}
-              />
-            </Form.Item>
-          ))}
-        </FormRow>
+        <FormRow>{renderSectionFields(section.fields[0].fields)}</FormRow>
       )}
       {section.canRepeat ? (
         <Button type="dashed" icon={<PlusOutlined />} onClick={addSectionRow}>

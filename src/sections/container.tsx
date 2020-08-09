@@ -10,6 +10,7 @@ import { State, SectionsAction } from './types'
 import {
   setFieldValue,
   moveSection,
+  addSection,
   addSectionRow,
   deleteSectionRow,
   moveSectionRow,
@@ -17,6 +18,7 @@ import {
 import { SectionComponentMemo } from './components/section'
 import { ProgressComponentMemo } from './components/progress'
 import { HandleComponent } from './components/actions'
+import { AddSectionComponent } from './components/addSection'
 
 const getSectionsStyle = (isDragging: boolean) => {
   return {
@@ -43,29 +45,32 @@ const Actions = styled.div`
 
 export const SectionsComponent: FunctionComponent = () => {
   const dispatch = useDispatch<Dispatch<SectionsAction>>()
-  const { sections, fields } = useSelector<AppState, State>(
+  const { templates, sections, fields } = useSelector<AppState, State>(
     ({ sectionsView }) => sectionsView
   )
 
-  const handleFieldChange = (field: string, value: string) => {
-    dispatch(setFieldValue(field, value))
+  const handleFieldChange = (id: string, value: string) => {
+    dispatch(setFieldValue(id, value))
   }
 
-  const handleAddSectionRow = (name: string) => {
-    return () => dispatch(addSectionRow(name))
+  const handleAddSection = (templateIndex: number) => {
+    dispatch(addSection(templateIndex))
   }
 
-  const handleDuplicateSectionRow = (name: string) => {
-    return (pos: number) => dispatch(addSectionRow(name, pos, true))
+  const handleAddSectionRow = (id: string) => {
+    return () => dispatch(addSectionRow(id))
   }
 
-  const handleDeleteSectionRow = (name: string) => {
-    return (pos: number) => dispatch(deleteSectionRow(name, pos))
+  const handleDuplicateSectionRow = (id: string) => {
+    return (pos: number) => dispatch(addSectionRow(id, pos, true))
   }
 
-  const handleMoveSectionRow = (name: string) => {
-    return (row: string, pos: number) =>
-      dispatch(moveSectionRow(name, row, pos))
+  const handleDeleteSectionRow = (id: string) => {
+    return (pos: number) => dispatch(deleteSectionRow(id, pos))
+  }
+
+  const handleMoveSectionRow = (id: string) => {
+    return (row: string, pos: number) => dispatch(moveSectionRow(id, row, pos))
   }
 
   const handleDragEnd = (result) => {
@@ -87,12 +92,10 @@ export const SectionsComponent: FunctionComponent = () => {
         section={sections.byId[section]}
         fields={fields}
         fieldChange={handleFieldChange}
-        addSectionRow={handleAddSectionRow(sections.byId[section].name)}
-        duplicateSectionRow={handleDuplicateSectionRow(
-          sections.byId[section].name
-        )}
-        deleteSectionRow={handleDeleteSectionRow(sections.byId[section].name)}
-        moveSectionRow={handleMoveSectionRow(sections.byId[section].name)}
+        addSectionRow={handleAddSectionRow(section)}
+        duplicateSectionRow={handleDuplicateSectionRow(section)}
+        deleteSectionRow={handleDeleteSectionRow(section)}
+        moveSectionRow={handleMoveSectionRow(section)}
       />
     </>
   )
@@ -102,19 +105,19 @@ export const SectionsComponent: FunctionComponent = () => {
       <Col
         xs={24}
         sm={24}
-        md={12}
+        md={24}
         lg={12}
         xl={12}
         xxl={{ span: 10, offset: 2 }}
       >
         <Row>
-          <Col xs={0} sm={8} md={8} lg={8} xl={8}>
+          <Col xs={0} sm={0} md={6} lg={8} xl={8}>
             <ProgressComponentMemo sections={sections} />
           </Col>
-          <Col xs={24} sm={16} md={16} lg={16} xl={16}>
+          <Col xs={24} sm={24} md={18} lg={16} xl={16}>
             <div style={{ padding: '20px 0px' }}>
               {sections.fixedIds.map((section) => (
-                <div key={section} id={section}>
+                <div key={section} id={sections.byId[section].name}>
                   {renderSection(section)}
                 </div>
               ))}
@@ -134,7 +137,7 @@ export const SectionsComponent: FunctionComponent = () => {
                         >
                           {(provided, snapshot) => (
                             <div
-                              id={section}
+                              id={sections.byId[section].name}
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               style={getSectionStyle(
@@ -158,11 +161,15 @@ export const SectionsComponent: FunctionComponent = () => {
                   )}
                 </Droppable>
               </DragDropContext>
+              <AddSectionComponent
+                templates={templates}
+                addSection={handleAddSection}
+              />
             </div>
           </Col>
         </Row>
       </Col>
-      <Col md={12} lg={12} xl={12} xxl={10}></Col>
+      <Col lg={12} xl={12} xxl={10}></Col>
     </Row>
   )
 }

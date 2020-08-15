@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { SectionComponentMemo } from './section'
-import { Section, FieldType } from '../types'
+import { Section, FieldType, Field, RichTextField } from '../types'
 
 const fixedSectionMock: Section = {
   name: 'section_1',
@@ -27,31 +27,38 @@ const dynamicSectionMock: Section = {
   ],
 }
 
-const fieldsMock = {
+const fieldsMock: {
+  byId: { [key: string]: Field | RichTextField }
+  allIds: string[]
+} = {
   byId: {
     fld_1: {
       name: 'fld_1',
       title: 'First Name',
       type: FieldType.Text,
       value: '',
+      defaultValue: '',
     },
     fld_2: {
       name: 'fld_2',
       title: 'Email',
       type: FieldType.Email,
       value: 'user@corp.co',
+      defaultValue: '',
     },
     fld_3: {
       name: 'fld_3',
       title: 'First Name',
       type: FieldType.Text,
       value: 'Odin',
+      defaultValue: '',
     },
     fld_4: {
       name: 'fld_4',
       title: 'Email',
       type: FieldType.Email,
       value: 'odin@corp.co',
+      defaultValue: '',
     },
   },
   allIds: ['fld_1', 'fld_2', 'fld_3', 'fld_4'],

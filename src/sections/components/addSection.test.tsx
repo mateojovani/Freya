@@ -3,9 +3,12 @@ import '@testing-library/jest-dom'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
 import { AddSectionComponent } from './addSection'
-import { FieldType } from '../types'
+import { FieldType, TemplateSection } from '../types'
 
-const templates = {
+const templates: {
+  sections: TemplateSection[]
+  inUse: string[]
+} = {
   sections: [
     {
       name: 'bio',
@@ -21,12 +24,14 @@ const templates = {
               title: 'First name',
               type: FieldType.Text,
               value: '',
+              defaultValue: '',
             },
             {
               name: 'lastName',
               title: 'Last name',
               type: FieldType.Text,
               value: '',
+              defaultValue: '',
             },
           ],
         ],
@@ -46,6 +51,7 @@ const templates = {
               title: 'Job title',
               type: FieldType.Text,
               value: '',
+              defaultValue: '',
             },
           ],
           [
@@ -53,28 +59,33 @@ const templates = {
               name: 'job_desc',
               title: 'Job description',
               type: FieldType.RichText,
-              value: '',
+              value: [],
+              defaultValue: [],
             },
           ],
         ],
       ],
-    }
+    },
   ],
   inUse: ['bio'],
 }
 
 describe('HandleComponent', () => {
   test('basic config', () => {
-    render(<AddSectionComponent templates={templates} addSection={() => {}}/>)
+    render(<AddSectionComponent templates={templates} addSection={() => {}} />)
     expect(screen.getByText(/Add section/i)).toBeInTheDocument()
     expect(screen.queryByText(/Add a section/i)).toBeNull()
   })
 
-
   describe('click add section button', () => {
     const handleAddSection = jest.fn()
     beforeEach(() => {
-      render(<AddSectionComponent templates={templates} addSection={handleAddSection}/>)
+      render(
+        <AddSectionComponent
+          templates={templates}
+          addSection={handleAddSection}
+        />
+      )
     })
 
     test('modal should open', async () => {

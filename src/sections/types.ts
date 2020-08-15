@@ -1,4 +1,5 @@
 import { Action } from 'redux'
+import { Node } from 'slate'
 
 interface SectionFields {
   name: string
@@ -14,7 +15,7 @@ export interface Section {
   fields: SectionFields[]
 }
 
-type FieldsRow = Field[][]
+type FieldsRow = (Field | RichTextField)[][]
 
 export interface TemplateSection {
   name: string
@@ -38,13 +39,28 @@ export enum FieldType {
 export interface Field {
   name: string
   title: string
-  type: FieldType
+  type:
+    | FieldType.Text
+    | FieldType.Email
+    | FieldType.Number
+    | FieldType.Tel
+    | FieldType.Date
+    | FieldType.File
   value: string
+  defaultValue: string
+}
+
+export interface RichTextField {
+  name: string
+  title: string
+  type: FieldType.RichText
+  value: Node[]
+  defaultValue: Node[]
 }
 
 export interface State {
   templates: {
-    sections: TemplateSection[],
+    sections: TemplateSection[]
     inUse: string[]
   }
   sections: {
@@ -54,7 +70,7 @@ export interface State {
     allIds: string[]
   }
   fields: {
-    byId: { [key: string]: Field }
+    byId: { [key: string]: Field | RichTextField }
     allIds: string[]
   }
 }

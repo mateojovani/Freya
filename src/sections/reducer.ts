@@ -1,7 +1,7 @@
 import produce, { Draft } from 'immer'
 import { uuid } from 'uuidv4'
 
-import { State, SectionsAction, FieldType } from './types'
+import { State, SectionsAction, FieldType, RichTextField, Field } from './types'
 
 const sectionsMockNormalised: State = {
   templates: {
@@ -20,12 +20,14 @@ const sectionsMockNormalised: State = {
                 title: 'First name',
                 type: FieldType.Text,
                 value: '',
+                defaultValue: '',
               },
               {
                 name: 'lastName',
                 title: 'Last name',
                 type: FieldType.Text,
                 value: '',
+                defaultValue: '',
               },
             ],
             [
@@ -34,6 +36,7 @@ const sectionsMockNormalised: State = {
                 title: 'Your Title',
                 type: FieldType.Text,
                 value: '',
+                defaultValue: '',
               },
             ],
             [
@@ -42,12 +45,14 @@ const sectionsMockNormalised: State = {
                 title: 'Email',
                 type: FieldType.Email,
                 value: '',
+                defaultValue: '',
               },
               {
                 name: 'phone',
                 title: 'Phone',
                 type: FieldType.Tel,
                 value: '',
+                defaultValue: '',
               },
             ],
             [
@@ -55,7 +60,18 @@ const sectionsMockNormalised: State = {
                 name: 'summary',
                 title: 'Short summary',
                 type: FieldType.RichText,
-                value: '',
+                value: [
+                  {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                  },
+                ],
+                defaultValue: [
+                  {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                  },
+                ],
               },
             ],
           ],
@@ -75,6 +91,7 @@ const sectionsMockNormalised: State = {
                 title: 'Job title',
                 type: FieldType.Text,
                 value: '',
+                defaultValue: '',
               },
             ],
             [
@@ -82,7 +99,18 @@ const sectionsMockNormalised: State = {
                 name: 'job_desc',
                 title: 'Job description',
                 type: FieldType.RichText,
-                value: '',
+                value: [
+                  {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                  },
+                ],
+                defaultValue: [
+                  {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                  },
+                ],
               },
             ],
           ],
@@ -102,6 +130,7 @@ const sectionsMockNormalised: State = {
                 title: 'Start date',
                 type: FieldType.Date,
                 value: '',
+                defaultValue: '',
               },
             ],
           ],
@@ -148,36 +177,52 @@ const sectionsMockNormalised: State = {
         title: 'First Name',
         type: FieldType.Text,
         value: '',
+        defaultValue: '',
       },
       'bae74c1a-94aa-46a5-8870-60d9552dfaa7': {
         name: 'lastName',
         title: 'Last Name',
         type: FieldType.Text,
         value: '',
+        defaultValue: '',
       },
       'c92befdb-e556-4920-b3a8-39a272d98aff': {
         name: 'title',
         title: 'Your Title',
         type: FieldType.Text,
         value: '',
+        defaultValue: '',
       },
       'aa847c1a-2e9b-4e73-9b4a-1ac3499580ee': {
         name: 'email',
         title: 'Email',
         type: FieldType.Email,
         value: '',
+        defaultValue: '',
       },
       '4903997b-ef2f-48b4-9b6c-95c9655aa389': {
         name: 'phone',
         title: 'Phone',
         type: FieldType.Tel,
         value: '',
+        defaultValue: '',
       },
       'eb0e58e5-c948-44fc-975a-35fcf5204487': {
         name: 'summary',
         title: 'Short summary',
         type: FieldType.RichText,
-        value: '',
+        value: [
+          {
+            type: 'paragraph',
+            children: [{ text: '' }],
+          },
+        ],
+        defaultValue: [
+          {
+            type: 'paragraph',
+            children: [{ text: '' }],
+          },
+        ],
       },
     },
     allIds: [
@@ -209,7 +254,7 @@ export default produce((draft: Draft<State>, action: SectionsAction) => {
       draft.templates.inUse.push(template.name)
       draft.sections.byId[sectionId] = {
         ...template,
-        fields: template.fields.map(row => {
+        fields: template.fields.map((row) => {
           return {
             name: `row_${uuid()}`,
             fields: row.map((fields) =>
@@ -246,14 +291,19 @@ export default produce((draft: Draft<State>, action: SectionsAction) => {
       const sectionFields = section.fields[mirrorRowIdx].fields
       const repeated = {
         name: `row_${uuid()}`,
-        fields: sectionFields.map(row => row.map(mirrorField => {
-          const fieldId = uuid()
-          draft.fields.byId[fieldId] = {
-            ...draft.fields.byId[mirrorField],
-            value: copy ? draft.fields.byId[mirrorField].value : ''
-          }
-          return fieldId
-        })),
+        fields: sectionFields.map((row) =>
+          row.map((mirrorFieldId) => {
+            const fieldId = uuid()
+            const mirrorField: Field | RichTextField =
+              draft.fields.byId[mirrorFieldId]
+            //@ts-ignore
+            draft.fields.byId[fieldId] = {
+              ...mirrorField,
+              value: copy ? mirrorField.value : mirrorField.defaultValue,
+            }
+            return fieldId
+          })
+        ),
       }
       section.fields.splice(mirrorRowIdx + 1, 0, repeated)
       break
@@ -263,7 +313,7 @@ export default produce((draft: Draft<State>, action: SectionsAction) => {
       const section = draft.sections.byId[id]
       const deletedFields = section.fields.splice(pos, 1)
       deletedFields[0].fields.forEach((row) => {
-        row.forEach(field => {
+        row.forEach((field) => {
           delete draft.fields.byId[field]
           draft.fields.allIds.splice(draft.fields.allIds.indexOf(field), 1)
         })
@@ -271,16 +321,16 @@ export default produce((draft: Draft<State>, action: SectionsAction) => {
       break
     }
     case 'MOVE_SECTION_ROW': {
-        const { id, row, pos } = action.payload
-        const section = draft.sections.byId[id]
-        const movingRowIdx = section.fields.findIndex(
-          (fieldsRow) => fieldsRow.name === row
-        )
-        const currentRow = { ...section.fields[pos] }
-        const movingRow = { ...section.fields[movingRowIdx] }
-        section.fields[movingRowIdx] = currentRow
-        section.fields[pos] = movingRow
-        break
+      const { id, row, pos } = action.payload
+      const section = draft.sections.byId[id]
+      const movingRowIdx = section.fields.findIndex(
+        (fieldsRow) => fieldsRow.name === row
+      )
+      const currentRow = { ...section.fields[pos] }
+      const movingRow = { ...section.fields[movingRowIdx] }
+      section.fields[movingRowIdx] = currentRow
+      section.fields[pos] = movingRow
+      break
     }
   }
 }, sectionsMockNormalised)

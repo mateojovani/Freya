@@ -27,12 +27,14 @@ export const sectionsMockNormalised: State = {
                 title: 'First name',
                 type: FieldType.Text,
                 value: '',
+                defaultValue: '',
               },
               {
                 name: 'lastName',
                 title: 'Last name',
                 type: FieldType.Text,
                 value: '',
+                defaultValue: '',
               },
             ],
             [
@@ -41,6 +43,7 @@ export const sectionsMockNormalised: State = {
                 title: 'Your Title',
                 type: FieldType.Text,
                 value: '',
+                defaultValue: '',
               },
             ],
             [
@@ -49,12 +52,14 @@ export const sectionsMockNormalised: State = {
                 title: 'Email',
                 type: FieldType.Email,
                 value: '',
+                defaultValue: '',
               },
               {
                 name: 'phone',
                 title: 'Phone',
                 type: FieldType.Tel,
                 value: '',
+                defaultValue: '',
               },
             ],
             [
@@ -62,7 +67,18 @@ export const sectionsMockNormalised: State = {
                 name: 'summary',
                 title: 'Short summary',
                 type: FieldType.RichText,
-                value: '',
+                value: [
+                  {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                  },
+                ],
+                defaultValue: [
+                  {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                  },
+                ],
               },
             ],
           ],
@@ -82,6 +98,7 @@ export const sectionsMockNormalised: State = {
                 title: 'Job title',
                 type: FieldType.Text,
                 value: '',
+                defaultValue: '',
               },
             ],
             [
@@ -89,7 +106,18 @@ export const sectionsMockNormalised: State = {
                 name: 'job_desc',
                 title: 'Job description',
                 type: FieldType.RichText,
-                value: '',
+                value: [
+                  {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                  },
+                ],
+                defaultValue: [
+                  {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                  },
+                ],
               },
             ],
           ],
@@ -109,6 +137,7 @@ export const sectionsMockNormalised: State = {
                 title: 'Start date',
                 type: FieldType.Date,
                 value: '',
+                defaultValue: '',
               },
             ],
           ],
@@ -191,54 +220,83 @@ export const sectionsMockNormalised: State = {
         title: 'First Name',
         type: FieldType.Text,
         value: '',
+        defaultValue: '',
       },
       'bae74c1a-94aa-46a5-8870-60d9552dfaa7': {
         name: 'lastName',
         title: 'Last Name',
         type: FieldType.Text,
         value: '',
+        defaultValue: '',
       },
       'c92befdb-e556-4920-b3a8-39a272d98aff': {
         name: 'title',
         title: 'Your Title',
         type: FieldType.Text,
         value: '',
+        defaultValue: '',
       },
       'aa847c1a-2e9b-4e73-9b4a-1ac3499580ee': {
         name: 'email',
         title: 'Email',
         type: FieldType.Email,
         value: '',
+        defaultValue: '',
       },
       '4903997b-ef2f-48b4-9b6c-95c9655aa389': {
         name: 'phone',
         title: 'Phone',
         type: FieldType.Tel,
         value: '',
+        defaultValue: '',
       },
       'eb0e58e5-c948-44fc-975a-35fcf5204487': {
         name: 'summary',
         title: 'Short summary',
         type: FieldType.RichText,
-        value: '',
+        value: [
+          {
+            type: 'paragraph',
+            children: [{ text: '' }],
+          },
+        ],
+        defaultValue: [
+          {
+            type: 'paragraph',
+            children: [{ text: '' }],
+          },
+        ],
       },
       '06438-d80c-f0c2-670a-e6db774a6138': {
         name: 'job_title',
         title: 'Job title',
         type: FieldType.Text,
         value: '',
+        defaultValue: '',
       },
       'fc0a8b7-be80-04a7-0586-7c646dcc8c62': {
         name: 'job_desc',
         title: 'Job description',
         type: FieldType.RichText,
-        value: '',
+        value: [
+          {
+            type: 'paragraph',
+            children: [{ text: '' }],
+          },
+        ],
+        defaultValue: [
+          {
+            type: 'paragraph',
+            children: [{ text: '' }],
+          },
+        ],
       },
       '3c6c03-171-1cbc-86b3-1ccebe64d101': {
         name: 'ed_start_date',
         title: 'Start date',
         type: FieldType.Date,
         value: '',
+        defaultValue: '',
       },
     },
     allIds: [

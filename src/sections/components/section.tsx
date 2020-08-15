@@ -5,17 +5,18 @@ import styled from 'styled-components'
 import { PlusOutlined } from '@ant-design/icons'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
-import { Section, Field, FieldType } from '../types'
+import { Section, Field, FieldType, RichTextField } from '../types'
 import {
   Actions,
   HandleComponent,
   DeleteComponent,
   DuplicateComponent,
 } from './actions'
+import { EditorComponent } from './editor'
 
 type SectionProps = {
   section: Section
-  fields: { byId: { [key: string]: Field }; allIds: string[] }
+  fields: { byId: { [key: string]: Field | RichTextField }; allIds: string[] }
   fieldChange: (name: string, value: string) => void
   addSectionRow?: () => void
   duplicateSectionRow?: (index: number) => void
@@ -25,8 +26,8 @@ type SectionProps = {
 
 type FieldProps = {
   id: string
-  field: Field
-  handleChange: (id: string, value: string) => void
+  field: Field | RichTextField
+  handleChange: (id: string, value) => void
 }
 
 const FieldComponent: FunctionComponent<FieldProps> = ({
@@ -34,29 +35,22 @@ const FieldComponent: FunctionComponent<FieldProps> = ({
   field,
   handleChange,
 }) => {
-  const handleChangeMemo = useCallback(
-    (ev) => {
-      handleChange(id, ev.target.value)
-    },
-    [field]
-  )
-
   switch (field.type) {
     case FieldType.RichText:
       return (
-        <Input.TextArea
-          value={field.value}
+        <EditorComponent
           id={id}
-          onChange={handleChangeMemo}
+          value={field.value}
+          onChange={(value) => handleChange(id, value)}
         />
       )
     default:
       return (
         <Input
-          value={field.value}
           id={id}
+          value={field.value}
           type={field.type}
-          onChange={handleChangeMemo}
+          onChange={(ev) => handleChange(id, ev.target.value)}
         />
       )
   }

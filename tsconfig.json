@@ -5,6 +5,8 @@
     "paths": {
       "~/*": ["./*"]
     },
+    "skipLibCheck": true,
+    "downlevelIteration": true,
     "typeRoots": ["node_modules/@types"]
   },
   "include": ["src/**/*"]

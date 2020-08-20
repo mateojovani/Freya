@@ -52,6 +52,7 @@ const FieldComponent: FunctionComponent<FieldProps> = ({
           allowEmpty={[false, true]}
           value={field.value}
           onChange={(dates) => handleChange(id, dates)}
+          onPanelChange={(dates) => handleChange(id, dates)}
         />
       )
     default:

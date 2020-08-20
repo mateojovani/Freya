@@ -2,78 +2,22 @@
   "name": "freya",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "develop": "concurrently -r \"npm:type-check:watch\" \"npm:start\"",
-    "build": "npm run type-check && parcel build index.html",
-    "start": "parcel index.html",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "type-check": "tsc --noEmit",
-    "type-check:watch": "tsc --noEmit --watch",
-    "prettify": "prettier --write './src/**/*.{ts,tsx}'",
-    "storybook": "parcel ./storybook.html --port 1337"
-  },
-  "author": "",
+  "author": "Mateo Jovani",
   "license": "ISC",
-  "dependencies": {
-    "@ant-design/icons": "^4.2.1",
-    "@reduxjs/toolkit": "^1.4.0",
-    "@types/jest": "^26.0.8",
-    "@types/styled-components": "^5.1.2",
-    "antd": "^4.5.1",
-    "immer": "^7.0.7",
-    "is-hotkey": "^0.1.6",
-    "moment": "^2.27.0",
-    "react": "^16.8.6",
-    "react-beautiful-dnd": "^13.0.0",
-    "react-dom": "^16.8.6",
-    "react-redux": "^7.2.1",
-    "react-use-scroll": "^1.0.3",
-    "slate": "^0.58.4",
-    "slate-history": "^0.58.4",
-    "slate-react": "^0.58.4",
-    "styled-components": "^5.1.1",
-    "uuidv4": "^6.2.2"
+  "private": true,
+  "scripts": {
+    "start:dev": "concurrently \"yarn client:start:dev\" \"yarn api:start:dev\"",
+    "client:start:dev": "yarn workspace freya-client start:dev",
+    "client:test": "yarn workspace freya-client test",
+    "client:test:watch": "yarn workspace freya-client test:watch",
+    "client:build": "yarn workspace freya-client build",
+    "api:start:dev": "yarn workspace freya-api start:dev",
+    "api:start": "yarn workspace freya-api start"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
-    "@storybook/react": "^5.3.19",
-    "@testing-library/jest-dom": "^5.11.2",
-    "@testing-library/react": "^10.4.7",
-    "@testing-library/user-event": "^12.1.0",
-    "@types/node": "^10.7.0",
-    "@types/react": "^16.7.17",
-    "@types/react-beautiful-dnd": "^13.0.0",
-    "@types/react-dom": "^16.0.7",
-    "@types/react-redux": "^7.1.9",
-    "babel-core": "^6.26.3",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "concurrently": "^5.3.0",
-    "jest": "^26.2.2",
-    "jest-extended": "^0.11.5",
-    "parcel-bundler": "^1.12.4",
-    "prettier": "^2.0.5",
-    "sass": "^1.26.10",
-    "ts-jest": "^26.1.4",
-    "typescript": "^3.9.1"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.ts"
-    ],
-    "moduleNameMapper": {
-      ".+\\.css$": "<rootDir>/src/styleMock.ts"
-    },
-    "testMatch": [
-      "**/?(*.)+(spec|test).(ts|tsx|js)"
-    ]
+    "concurrently": "^5.3.0"
   }
 }

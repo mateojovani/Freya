@@ -1,13 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
-    "jsx": "react",
-    "paths": {
-      "~/*": ["./*"]
-    },
-    "skipLibCheck": true,
-    "downlevelIteration": true,
-    "typeRoots": ["node_modules/@types"]
-  },
-  "include": ["src/**/*"]
+    "typeRoots": ["./node_modules/@types"]
+  }
 }

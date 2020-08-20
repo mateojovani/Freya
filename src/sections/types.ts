@@ -1,5 +1,6 @@
 import { Action } from 'redux'
 import { Node } from 'slate'
+import { Moment } from 'moment'
 
 interface SectionFields {
   name: string
@@ -15,7 +16,9 @@ export interface Section {
   fields: SectionFields[]
 }
 
-type FieldsRow = (Field | RichTextField)[][]
+export type Field = BasicField | RichTextField | DateRangeField
+
+type FieldsRow = Field[][]
 
 export interface TemplateSection {
   name: string
@@ -33,10 +36,11 @@ export enum FieldType {
   Number = 'number',
   Tel = 'tel',
   Date = 'date',
+  DateRange = 'date-range',
   File = 'file',
 }
 
-export interface Field {
+export interface BasicField {
   name: string
   title: string
   type:
@@ -58,6 +62,14 @@ export interface RichTextField {
   defaultValue: Node[]
 }
 
+export interface DateRangeField {
+  name: string
+  title: string
+  type: FieldType.DateRange
+  value: [Moment, Moment]
+  defaultValue: [Moment, Moment]
+}
+
 export interface State {
   templates: {
     sections: TemplateSection[]
@@ -70,7 +82,7 @@ export interface State {
     allIds: string[]
   }
   fields: {
-    byId: { [key: string]: Field | RichTextField }
+    byId: { [key: string]: Field }
     allIds: string[]
   }
 }

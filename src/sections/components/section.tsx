@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { FunctionComponent, useCallback } from 'react'
-import { Row, Col, Form, Input, Button } from 'antd'
+import { Row, Col, Form, Input, Button, DatePicker } from 'antd'
 import styled from 'styled-components'
 import { PlusOutlined } from '@ant-design/icons'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
@@ -44,6 +44,16 @@ const FieldComponent: FunctionComponent<FieldProps> = ({
           onChange={(value) => handleChange(id, value)}
         />
       )
+    case FieldType.DateRange:
+      return (
+        <DatePicker.RangePicker
+          id={id}
+          picker="month"
+          allowEmpty={[false, true]}
+          value={field.value}
+          onChange={(dates) => handleChange(id, dates)}
+        />
+      )
     default:
       return (
         <Input
@@ -64,6 +74,7 @@ const FieldComponentMemo = React.memo(
 )
 
 const FormRow = styled.div`
+  margin-bottom: 30px;
   &:hover ${Actions} {
     visibility: visible;
   }

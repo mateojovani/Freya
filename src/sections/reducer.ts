@@ -1,7 +1,7 @@
 import produce, { Draft } from 'immer'
 import { uuid } from 'uuidv4'
 
-import { State, SectionsAction, FieldType, RichTextField, Field } from './types'
+import { State, SectionsAction, FieldType, Field } from './types'
 
 const sectionsMockNormalised: State = {
   templates: {
@@ -96,6 +96,31 @@ const sectionsMockNormalised: State = {
             ],
             [
               {
+                name: 'company',
+                title: 'Company',
+                type: FieldType.Text,
+                value: '',
+                defaultValue: '',
+              },
+              {
+                name: 'company_web',
+                title: 'Company website',
+                type: FieldType.Text,
+                value: '',
+                defaultValue: '',
+              },
+            ],
+            [
+              {
+                name: 'start_end_date',
+                title: 'Start & End Date',
+                type: FieldType.DateRange,
+                value: [null, null],
+                defaultValue: [null, null],
+              },
+            ],
+            [
+              {
                 name: 'job_desc',
                 title: 'Job description',
                 type: FieldType.RichText,
@@ -126,11 +151,55 @@ const sectionsMockNormalised: State = {
           [
             [
               {
-                name: 'ed_start_date',
-                title: 'Start date',
-                type: FieldType.Date,
+                name: 'school',
+                title: 'School',
+                type: FieldType.Text,
                 value: '',
                 defaultValue: '',
+              },
+              {
+                name: 'school_web',
+                title: 'School website',
+                type: FieldType.Text,
+                value: '',
+                defaultValue: '',
+              },
+            ],
+            [
+              {
+                name: 'degree',
+                title: 'Degree/Major',
+                type: FieldType.Text,
+                value: '',
+                defaultValue: '',
+              },
+            ],
+            [
+              {
+                name: 'sc_start_end_date',
+                title: 'Start & End Date',
+                type: FieldType.DateRange,
+                value: [null, null],
+                defaultValue: [null, null],
+              },
+            ],
+            [
+              {
+                name: 'sc_desc',
+                title: 'Description',
+                type: FieldType.RichText,
+                value: [
+                  {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                  },
+                ],
+                defaultValue: [
+                  {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                  },
+                ],
               },
             ],
           ],
@@ -294,8 +363,7 @@ export default produce((draft: Draft<State>, action: SectionsAction) => {
         fields: sectionFields.map((row) =>
           row.map((mirrorFieldId) => {
             const fieldId = uuid()
-            const mirrorField: Field | RichTextField =
-              draft.fields.byId[mirrorFieldId]
+            const mirrorField: Field = draft.fields.byId[mirrorFieldId]
             //@ts-ignore
             draft.fields.byId[fieldId] = {
               ...mirrorField,

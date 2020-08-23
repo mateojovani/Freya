@@ -1,6 +1,8 @@
 import { ApolloServer, gql } from 'apollo-server-express'
 import express from 'express'
 
+import { connect } from './db'
+
 const app = express()
 
 const server = new ApolloServer({
@@ -22,7 +24,13 @@ const server = new ApolloServer({
 })
 
 server.applyMiddleware({ app })
-
-app.listen({ port: process.env.API_PORT || 9000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-)
+;(async () => {
+  try {
+    await connect()
+    app.listen({ port: process.env.API_PORT || 4000 }, () =>
+      console.log(`🚀 Server ready at port: ${process.env.API_PORT}`)
+    )
+  } catch (e) {
+    console.log('Could not start server')
+  }
+})()

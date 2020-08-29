@@ -1,0 +1,6 @@
+/dist
+*.js
+*.js.map
+*.ts.map
+*.d.ts
+*.tsbuildinfo

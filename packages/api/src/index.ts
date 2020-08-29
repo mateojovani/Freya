@@ -1,5 +1,6 @@
 import { ApolloServer, gql } from 'apollo-server-express'
 import express from 'express'
+import { sectionTemplates, cv, CV, GQLSection } from 'freya-shared'
 
 import { connect } from './db'
 
@@ -7,18 +8,39 @@ const app = express()
 
 const server = new ApolloServer({
   typeDefs: gql`
+    type Field {
+      id: String
+      name: String!
+      title: String!
+      type: String!
+      value: String!
+      defaultValue: String!
+    }
+
+    type Section {
+      id: ID!
+      name: String!
+      title: String!
+      canMove: Boolean!
+      canRepeat: Boolean!
+      addLabel: String!
+      fields: [[[Field]]]
+    }
+
     type CV {
-      title: String
-      author: String
+      id: ID!
+      sections: [Section]!
     }
 
     type Query {
-      cvs: [CV]
+      cv: CV!
+      sectionTemplates: [Section]!
     }
   `,
   resolvers: {
     Query: {
-      cvs: () => [],
+      cv: (): CV => cv,
+      sectionTemplates: (): GQLSection[] => sectionTemplates,
     },
   },
 })
@@ -31,6 +53,6 @@ server.applyMiddleware({ app })
       console.log(`🚀 Server ready at port: ${process.env.API_PORT}`)
     )
   } catch (e) {
-    console.log('Could not start server')
+    console.log('Could not start server', e)
   }
 })()

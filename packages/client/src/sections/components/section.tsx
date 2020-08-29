@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { PlusOutlined } from '@ant-design/icons'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
-import { Section, Field, FieldType, RichTextField } from '../types'
+import { Field, FieldType } from 'freya-shared'
 import {
   Actions,
   HandleComponent,
@@ -13,20 +13,21 @@ import {
   DuplicateComponent,
 } from './actions'
 import { EditorComponent } from './editor'
+import { NormalisedSection } from '../reducer'
 
 type SectionProps = {
-  section: Section
-  fields: { byId: { [key: string]: Field | RichTextField }; allIds: string[] }
+  section: NormalisedSection
+  fields: { byId: { [key: string]: Field }; allIds: string[] }
   fieldChange: (name: string, value: string) => void
   addSectionRow?: () => void
   duplicateSectionRow?: (index: number) => void
   deleteSectionRow?: (index: number) => void
-  moveSectionRow?: (name: string, pos: number) => void
+  moveSectionRow?: (rowIdx: number, pos: number) => void
 }
 
 type FieldProps = {
   id: string
-  field: Field | RichTextField
+  field: Field
   handleChange: (id: string, value) => void
 }
 
@@ -146,8 +147,8 @@ const SectionComponent: FunctionComponent<SectionProps> = ({
                 ref={provided.innerRef}
                 style={getRowsStyle(snapshot.isDraggingOver)}
               >
-                {section.fields.map(({ name, fields: sectionFields }, i) => (
-                  <Draggable key={name} draggableId={name} index={i}>
+                {section.fields.map((sectionFields, i) => (
+                  <Draggable key={i} draggableId={i + ''} index={i}>
                     {(provided, snapshot) => (
                       <FormRow
                         ref={provided.innerRef}
@@ -181,7 +182,7 @@ const SectionComponent: FunctionComponent<SectionProps> = ({
           </Droppable>
         </DragDropContext>
       ) : (
-        <FormRow>{renderSectionFields(section.fields[0].fields)}</FormRow>
+        <FormRow>{renderSectionFields(section.fields[0])}</FormRow>
       )}
       {section.canRepeat ? (
         <Button type="dashed" icon={<PlusOutlined />} onClick={addSectionRow}>

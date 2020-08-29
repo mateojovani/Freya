@@ -1,8 +1,7 @@
 import { ActionCreator } from 'redux'
 
 import {
-  State,
-  SectionsLoadedAction,
+  CVLoadedAction,
   FieldValueSetAction,
   AddSectionAction,
   SectionMovedAction,
@@ -10,12 +9,20 @@ import {
   SectionRowDeletedAction,
   SectionRowMovedAction,
 } from './types'
+import { CV, GQLSection } from 'freya-shared'
 
-export const loadSections: ActionCreator<SectionsLoadedAction> = (
-  sections: State
-) => ({
-  type: 'LOAD_SECTIONS',
-  payload: sections,
+export const loadCV: ActionCreator<CVLoadedAction> = ({
+  cv,
+  sectionTemplates,
+}: {
+  cv: CV
+  sectionTemplates: GQLSection[]
+}) => ({
+  type: 'LOAD_CV',
+  payload: {
+    cv,
+    sectionTemplates,
+  },
 })
 
 export const setFieldValue: ActionCreator<FieldValueSetAction> = (
@@ -60,9 +67,9 @@ export const deleteSectionRow: ActionCreator<SectionRowDeletedAction> = (
 
 export const moveSectionRow: ActionCreator<SectionRowMovedAction> = (
   id: string,
-  row: string,
+  rowIdx: number,
   pos: number
 ) => ({
   type: 'MOVE_SECTION_ROW',
-  payload: { id, row, pos },
+  payload: { id, rowIdx, pos },
 })

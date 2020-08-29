@@ -1,5 +1,13 @@
 import 'jest-extended'
 import '@testing-library/jest-dom/extend-expect'
+require('dotenv').config()
+import { handlers } from 'freya-shared'
+import { setupServer } from 'msw/node'
+
+export const server = setupServer(...handlers)
+beforeAll(() => server.listen())
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

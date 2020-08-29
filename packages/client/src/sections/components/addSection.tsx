@@ -1,12 +1,11 @@
 import * as React from 'react'
 import { AppstoreAddOutlined } from '@ant-design/icons'
 import { Button, Modal, List, Typography } from 'antd'
-
-import { TemplateSection } from '../types'
+import { Section } from 'freya-shared'
 
 interface AddSectionProps {
   templates: {
-    sections: TemplateSection[]
+    sections: Section[]
     inUse: string[]
   }
   addSection: (index: number) => void
@@ -43,9 +42,7 @@ export const AddSectionComponent: React.FunctionComponent<AddSectionProps> = ({
               <Button
                 block={true}
                 type="dashed"
-                disabled={templates.inUse.some(
-                  (name) => template.name === name
-                )}
+                disabled={templates.inUse.some((id) => template.id === id)}
                 onClick={() => {
                   addSection(i)
                   setModalOpen(false)

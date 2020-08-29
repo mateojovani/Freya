@@ -23,6 +23,7 @@
   "dependencies": {
     "@types/mongoose": "^5.7.36",
     "apollo-server-express": "^2.16.1",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "graphql": "^15.3.0",
     "mongoose": "^5.10.0",

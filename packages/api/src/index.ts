@@ -1,10 +1,12 @@
 import { ApolloServer, gql } from 'apollo-server-express'
 import express from 'express'
+import cors from 'cors'
 import { sectionTemplates, cv, CV, GQLSection } from 'freya-shared'
 
 import { connect } from './db'
 
 const app = express()
+app.use(cors())
 
 const server = new ApolloServer({
   typeDefs: gql`
@@ -49,7 +51,7 @@ server.applyMiddleware({ app })
 ;(async () => {
   try {
     await connect()
-    app.listen({ port: process.env.API_PORT || 4000 }, () =>
+    app.listen({ port: process.env.PORT || 4000 }, () =>
       console.log(`🚀 Server ready at port: ${process.env.API_PORT}`)
     )
   } catch (e) {

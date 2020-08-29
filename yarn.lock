@@ -11852,13 +11852,6 @@ react-textarea-autosize@^7.1.0:
     "@babel/runtime" "^7.1.2"
     prop-types "^15.6.0"
 
-react-use-scroll@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/react-use-scroll/-/react-use-scroll-1.0.3.tgz#65b098eef93f36a88c211c1ff34ff09bbfdb79dd"
-  integrity sha512-BWa3gnyv8il+LH/Llc5uTPrKA4rR4nSFmF/etyqd7lhlox9gva8JMgjOYpPPO79Z0LsP87we+uEGqqut/YWetA==
-  dependencies:
-    react "^16.8.6"
-
 react@^16.8.3, react@^16.8.6:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"

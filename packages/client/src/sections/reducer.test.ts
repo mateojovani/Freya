@@ -1,4 +1,4 @@
-import { FieldType } from 'freya-shared/schema'
+import { FieldType } from 'freya-shared'
 
 import reducer, { State } from './reducer'
 import {

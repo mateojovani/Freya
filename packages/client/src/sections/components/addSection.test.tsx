@@ -3,7 +3,7 @@ import '@testing-library/jest-dom'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
 import { AddSectionComponent } from './addSection'
-import { Section, FieldType } from 'freya-shared/schema'
+import { Section, FieldType } from 'freya-shared'
 
 const templates: {
   sections: Section[]

@@ -1,6 +1,6 @@
 import produce, { Draft } from 'immer'
 import { uuid } from 'uuidv4'
-import { Field, CV, Section, GQLSection } from 'freya-shared/schema'
+import { Field, CV, Section, GQLSection } from 'freya-shared'
 
 import { SectionsAction } from './types'
 

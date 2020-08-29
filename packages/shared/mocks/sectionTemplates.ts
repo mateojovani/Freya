@@ -1,5 +1,5 @@
 import { uuid } from 'uuidv4'
-import { FieldType, GQLSection } from 'freya-shared/schema'
+import { FieldType, GQLSection } from 'freya-shared'
 
 const sectionTemplates: GQLSection[] = [
   {

@@ -1,5 +1,5 @@
 import { Action } from 'redux'
-import { GQLSection, CV } from 'freya-shared/schema'
+import { GQLSection, CV } from 'freya-shared'
 
 export interface CVLoadedAction extends Action {
   type: 'LOAD_CV'

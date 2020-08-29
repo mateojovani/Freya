@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 
 import { SectionComponentMemo } from './section'
 import { NormalisedSection } from '../reducer'
-import { Field, FieldType } from 'freya-shared/schema'
+import { Field, FieldType } from 'freya-shared'
 
 const fixedSectionMock: NormalisedSection = {
   name: 'section_1',

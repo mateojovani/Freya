@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { AppstoreAddOutlined } from '@ant-design/icons'
 import { Button, Modal, List, Typography } from 'antd'
-import { Section } from 'freya-shared/schema'
+import { Section } from 'freya-shared'
 
 interface AddSectionProps {
   templates: {

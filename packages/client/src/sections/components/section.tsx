@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { PlusOutlined } from '@ant-design/icons'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
-import { Field, FieldType } from 'freya-shared/schema'
+import { Field, FieldType } from 'freya-shared'
 import {
   Actions,
   HandleComponent,

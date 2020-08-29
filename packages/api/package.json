@@ -5,8 +5,8 @@
   "author": "Mateo Jovani",
   "license": "MIT",
   "scripts": {
-    "start": "npm run build;npm run serve",
-    "build": "tsc",
+    "start": "npm run build && npm run serve",
+    "build": "tsc --build",
     "serve": "node -r dotenv/config ./dist/index.js",
     "start:dev": "npm run docker;concurrently -r \"npm:type-check:watch\" \"npm:watch\"",
     "watch": "nodemon --exec ts-node -r dotenv/config src/index.ts",

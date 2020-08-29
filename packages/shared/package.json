@@ -8,6 +8,7 @@
     "graphql": "^15.3.0",
     "graphql-request": "^3.0.0",
     "moment": "^2.27.0",
+    "msw": "^0.20.5",
     "slate": "^0.58.4",
     "uuidv4": "^6.2.3"
   }

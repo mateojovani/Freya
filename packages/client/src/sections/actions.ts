@@ -9,7 +9,7 @@ import {
   SectionRowDeletedAction,
   SectionRowMovedAction,
 } from './types'
-import { CV, GQLSection } from 'freya-shared/schema'
+import { CV, GQLSection } from 'freya-shared'
 
 export const loadCV: ActionCreator<CVLoadedAction> = ({
   cv,

@@ -3,7 +3,7 @@ import '@testing-library/jest-dom'
 import { screen, waitFor } from '@testing-library/react'
 
 import { SectionsComponent } from './container'
-import { renderWithStore } from '../utils'
+import { renderWithStore } from '../testUtils'
 
 describe('Sections', () => {
   test('should render sections', async () => {

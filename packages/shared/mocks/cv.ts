@@ -1,5 +1,5 @@
 import { uuid } from 'uuidv4'
-import { CV } from 'freya-shared/schema'
+import { CV } from 'freya-shared'
 import { sectionTemplates } from './sectionTemplates'
 
 const fieldsWithId = sectionTemplates[0].fields.map((secFlds) =>

@@ -3,7 +3,7 @@ import { graphql } from 'msw'
 import { sectionTemplates } from './sectionTemplates'
 import { cv } from './cv'
 
-const handlers = [
+const handlers: any = [
   graphql.query('GET_CV', (_, res, ctx) => {
     return res(
       ctx.data({

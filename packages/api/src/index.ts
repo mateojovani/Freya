@@ -1,7 +1,6 @@
 import { ApolloServer, gql } from 'apollo-server-express'
 import express from 'express'
-import { CV, GQLSection } from 'freya-shared/schema'
-import { sectionTemplates, cv } from 'freya-shared/mocks'
+import { sectionTemplates, cv, CV, GQLSection } from 'freya-shared'
 
 import { connect } from './db'
 

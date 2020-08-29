@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { Typography, Row, Col, Skeleton } from 'antd'
 import styled from 'styled-components'
-import { cvQuery } from 'freya-shared/gql'
+import { cvQuery } from 'freya-shared'
 
 import { useQuery } from '../utils'
 import { AppState } from '../types'

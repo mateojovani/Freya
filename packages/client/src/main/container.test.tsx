@@ -2,7 +2,7 @@ import * as React from 'react'
 import '@testing-library/jest-dom'
 
 import { Main } from './container'
-import { renderWithStore } from '../utils'
+import { renderWithStore } from '../testUtils'
 import { waitFor, screen } from '@testing-library/react'
 
 describe('Main', () => {

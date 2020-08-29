@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "npm run type-check && parcel build index.html",
+    "build": "parcel build index.html",
     "serve": "http-server ./dist -p 1234",
     "start": "parcel index.html",
     "start:dev": "concurrently -r \"npm:type-check:watch\" \"npm:test:watch\" \"npm:start\"",

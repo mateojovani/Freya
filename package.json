@@ -17,6 +17,9 @@
   "workspaces": [
     "packages/*"
   ],
+  "dependencies": {
+    "typescript": "^4.0.2"
+  },
   "devDependencies": {
     "concurrently": "^5.3.0"
   }

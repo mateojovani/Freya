@@ -1,12 +1,15 @@
 import * as React from 'react'
-import { Dispatch, FunctionComponent } from 'react'
+import { Dispatch, FunctionComponent, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { Typography, Row, Col } from 'antd'
+import { Typography, Row, Col, Skeleton } from 'antd'
 import styled from 'styled-components'
+import { cvQuery } from 'freya-shared/gql'
 
+import { useQuery } from '../utils'
 import { AppState } from '../types'
-import { State, SectionsAction } from './types'
+import { SectionsAction } from './types'
+import { State } from './reducer'
 import {
   setFieldValue,
   moveSection,
@@ -14,6 +17,7 @@ import {
   addSectionRow,
   deleteSectionRow,
   moveSectionRow,
+  loadCV,
 } from './actions'
 import { SectionComponentMemo } from './components/section'
 import { ProgressComponentMemo } from './components/progress'
@@ -45,9 +49,16 @@ const Actions = styled.div`
 
 export const SectionsComponent: FunctionComponent = () => {
   const dispatch = useDispatch<Dispatch<SectionsAction>>()
-  const { templates, sections, fields } = useSelector<AppState, State>(
+  const { templates, sections, fields, loading } = useSelector<AppState, State>(
     ({ sectionsView }) => sectionsView
   )
+  const { response } = useQuery(cvQuery)
+
+  useEffect(() => {
+    if (response) {
+      dispatch(loadCV(response))
+    }
+  }, [response])
 
   const handleFieldChange = (id: string, value: string) => {
     dispatch(setFieldValue(id, value))
@@ -70,7 +81,8 @@ export const SectionsComponent: FunctionComponent = () => {
   }
 
   const handleMoveSectionRow = (id: string) => {
-    return (row: string, pos: number) => dispatch(moveSectionRow(id, row, pos))
+    return (rowIdx: number, pos: number) =>
+      dispatch(moveSectionRow(id, rowIdx, pos))
   }
 
   const handleDragEnd = (result) => {
@@ -99,6 +111,23 @@ export const SectionsComponent: FunctionComponent = () => {
       />
     </>
   )
+
+  if (loading) {
+    return (
+      <Row gutter={[8, 8]}>
+        <Col
+          xs={24}
+          sm={24}
+          md={24}
+          lg={12}
+          xl={12}
+          xxl={{ span: 10, offset: 2 }}
+        >
+          <Skeleton />
+        </Col>
+      </Row>
+    )
+  }
 
   return (
     <Row gutter={[8, 8]}>

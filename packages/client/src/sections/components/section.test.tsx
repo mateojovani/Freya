@@ -4,31 +4,29 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { SectionComponentMemo } from './section'
-import { Section, FieldType, Field, RichTextField } from '../types'
+import { NormalisedSection } from '../reducer'
+import { Field, FieldType } from 'freya-shared/schema'
 
-const fixedSectionMock: Section = {
+const fixedSectionMock: NormalisedSection = {
   name: 'section_1',
   title: 'Section 1',
   canMove: false,
   canRepeat: false,
   addLabel: 'Add section 1 row',
-  fields: [{ name: 'row', fields: [['fld_1', 'fld_2']] }],
+  fields: [[['fld_1', 'fld_2']]],
 }
 
-const dynamicSectionMock: Section = {
+const dynamicSectionMock: NormalisedSection = {
   name: 'section_1',
   title: 'Section 1',
   canMove: true,
   canRepeat: true,
   addLabel: 'Add section 1 row',
-  fields: [
-    { name: 'row_1', fields: [['fld_1', 'fld_2']] },
-    { name: 'row_2', fields: [['fld_3', 'fld_4']] },
-  ],
+  fields: [[['fld_1', 'fld_2']], [['fld_3', 'fld_4']]],
 }
 
 const fieldsMock: {
-  byId: { [key: string]: Field | RichTextField }
+  byId: { [key: string]: Field }
   allIds: string[]
 } = {
   byId: {
@@ -120,7 +118,7 @@ describe('SectionComponentMemo', () => {
       />
     )
 
-    userEvent.hover(container.querySelector('[data-rbd-draggable-id="row_1"]'))
+    userEvent.hover(container.querySelector('[data-rbd-draggable-id="0"]'))
     userEvent.click(container.querySelector('.anticon-delete'))
     expect(handleSectionRowDelete).toBeCalledTimes(1)
     expect(handleSectionRowDelete).toBeCalledWith(0)
@@ -137,7 +135,7 @@ describe('SectionComponentMemo', () => {
       />
     )
 
-    userEvent.hover(container.querySelector('[data-rbd-draggable-id="row_1"]'))
+    userEvent.hover(container.querySelector('[data-rbd-draggable-id="1"]'))
     userEvent.click(container.querySelector('.anticon-copy'))
     expect(handleSectionRowDuplicate).toBeCalledTimes(1)
     expect(handleSectionRowDuplicate).toBeCalledWith(0)

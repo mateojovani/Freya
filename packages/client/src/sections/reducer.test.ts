@@ -1,4 +1,6 @@
-import reducer from './reducer'
+import { FieldType } from 'freya-shared/schema'
+
+import reducer, { State } from './reducer'
 import {
   setFieldValue,
   addSection,
@@ -7,7 +9,300 @@ import {
   moveSectionRow,
   deleteSectionRow,
 } from './actions'
-import { sectionsMockNormalised } from '../utils'
+
+const sectionsMockNormalised: State = {
+  templates: {
+    sections: [
+      {
+        id: '306c6b69-666b-4690-b5fb-e372c6d94236',
+        name: 'bio',
+        title: 'Personal information',
+        canMove: false,
+        canRepeat: false,
+        addLabel: 'Add information',
+        fields: [
+          [
+            [
+              {
+                name: 'firstName',
+                title: 'First name',
+                type: FieldType.Text,
+                value: '',
+                defaultValue: '',
+              },
+              {
+                name: 'lastName',
+                title: 'Last name',
+                type: FieldType.Text,
+                value: '',
+                defaultValue: '',
+              },
+            ],
+            [
+              {
+                name: 'title',
+                title: 'Your Title',
+                type: FieldType.Text,
+                value: '',
+                defaultValue: '',
+              },
+            ],
+            [
+              {
+                name: 'email',
+                title: 'Email',
+                type: FieldType.Email,
+                value: '',
+                defaultValue: '',
+              },
+              {
+                name: 'phone',
+                title: 'Phone',
+                type: FieldType.Tel,
+                value: '',
+                defaultValue: '',
+              },
+            ],
+            [
+              {
+                name: 'summary',
+                title: 'Short summary',
+                type: FieldType.RichText,
+                value: [
+                  {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                  },
+                ],
+                defaultValue: [
+                  {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                  },
+                ],
+              },
+            ],
+          ],
+        ],
+      },
+      {
+        id: '0fe069df-4b71-49d2-b638-e421106f2147',
+        name: 'experience',
+        title: 'Work experience',
+        canMove: true,
+        canRepeat: true,
+        addLabel: 'Add job',
+        fields: [
+          [
+            [
+              {
+                name: 'job_title',
+                title: 'Job title',
+                type: FieldType.Text,
+                value: '',
+                defaultValue: '',
+              },
+            ],
+            [
+              {
+                name: 'job_desc',
+                title: 'Job description',
+                type: FieldType.RichText,
+                value: [
+                  {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                  },
+                ],
+                defaultValue: [
+                  {
+                    type: 'paragraph',
+                    children: [{ text: '' }],
+                  },
+                ],
+              },
+            ],
+          ],
+        ],
+      },
+      {
+        id: 'f45f2fe2-2949-43a4-82a9-20793ae336a0',
+        name: 'education',
+        title: 'Education',
+        canMove: true,
+        canRepeat: true,
+        addLabel: 'Add education',
+        fields: [
+          [
+            [
+              {
+                name: 'ed_start_date',
+                title: 'Start date',
+                type: FieldType.Date,
+                value: '',
+                defaultValue: '',
+              },
+            ],
+          ],
+        ],
+      },
+    ],
+    inUse: ['bio', 'experience', 'education'],
+  },
+  sections: {
+    byId: {
+      'e572e220-41f1-491c-ab39-412f0d3b270c': {
+        name: 'bio',
+        title: 'Personal information',
+        canMove: false,
+        canRepeat: false,
+        addLabel: 'Add information',
+        fields: [
+          [
+            [
+              '681a3228-a410-4f7a-96cd-0d6d9274faf3',
+              'bae74c1a-94aa-46a5-8870-60d9552dfaa7',
+            ],
+            ['c92befdb-e556-4920-b3a8-39a272d98aff'],
+            [
+              'aa847c1a-2e9b-4e73-9b4a-1ac3499580ee',
+              '4903997b-ef2f-48b4-9b6c-95c9655aa389',
+            ],
+            ['eb0e58e5-c948-44fc-975a-35fcf5204487'],
+          ],
+        ],
+      },
+      'fe0dfdf-048f-ed65-6db6-cbf45746f8e7': {
+        name: 'experience',
+        title: 'Work experience',
+        canMove: true,
+        canRepeat: true,
+        addLabel: 'Add job',
+        fields: [
+          [
+            ['06438-d80c-f0c2-670a-e6db774a6138'],
+            ['fc0a8b7-be80-04a7-0586-7c646dcc8c62'],
+          ],
+        ],
+      },
+      'edc427-ffa2-03b-bbd7-50cd5f2c825': {
+        name: 'education',
+        title: 'Education',
+        canMove: true,
+        canRepeat: true,
+        addLabel: 'Add education',
+        fields: [[['3c6c03-171-1cbc-86b3-1ccebe64d101']]],
+      },
+    },
+    allIds: [
+      'e572e220-41f1-491c-ab39-412f0d3b270c',
+      'fe0dfdf-048f-ed65-6db6-cbf45746f8e7',
+      'edc427-ffa2-03b-bbd7-50cd5f2c825',
+    ],
+    fixedIds: ['e572e220-41f1-491c-ab39-412f0d3b270c'],
+    nonFixedIds: [
+      'fe0dfdf-048f-ed65-6db6-cbf45746f8e7',
+      'edc427-ffa2-03b-bbd7-50cd5f2c825',
+    ],
+  },
+  fields: {
+    byId: {
+      '681a3228-a410-4f7a-96cd-0d6d9274faf3': {
+        name: 'firstName',
+        title: 'First Name',
+        type: FieldType.Text,
+        value: '',
+        defaultValue: '',
+      },
+      'bae74c1a-94aa-46a5-8870-60d9552dfaa7': {
+        name: 'lastName',
+        title: 'Last Name',
+        type: FieldType.Text,
+        value: '',
+        defaultValue: '',
+      },
+      'c92befdb-e556-4920-b3a8-39a272d98aff': {
+        name: 'title',
+        title: 'Your Title',
+        type: FieldType.Text,
+        value: '',
+        defaultValue: '',
+      },
+      'aa847c1a-2e9b-4e73-9b4a-1ac3499580ee': {
+        name: 'email',
+        title: 'Email',
+        type: FieldType.Email,
+        value: '',
+        defaultValue: '',
+      },
+      '4903997b-ef2f-48b4-9b6c-95c9655aa389': {
+        name: 'phone',
+        title: 'Phone',
+        type: FieldType.Tel,
+        value: '',
+        defaultValue: '',
+      },
+      'eb0e58e5-c948-44fc-975a-35fcf5204487': {
+        name: 'summary',
+        title: 'Short summary',
+        type: FieldType.RichText,
+        value: [
+          {
+            type: 'paragraph',
+            children: [{ text: '' }],
+          },
+        ],
+        defaultValue: [
+          {
+            type: 'paragraph',
+            children: [{ text: '' }],
+          },
+        ],
+      },
+      '06438-d80c-f0c2-670a-e6db774a6138': {
+        name: 'job_title',
+        title: 'Job title',
+        type: FieldType.Text,
+        value: '',
+        defaultValue: '',
+      },
+      'fc0a8b7-be80-04a7-0586-7c646dcc8c62': {
+        name: 'job_desc',
+        title: 'Job description',
+        type: FieldType.RichText,
+        value: [
+          {
+            type: 'paragraph',
+            children: [{ text: '' }],
+          },
+        ],
+        defaultValue: [
+          {
+            type: 'paragraph',
+            children: [{ text: '' }],
+          },
+        ],
+      },
+      '3c6c03-171-1cbc-86b3-1ccebe64d101': {
+        name: 'ed_start_date',
+        title: 'Start date',
+        type: FieldType.Date,
+        value: '',
+        defaultValue: '',
+      },
+    },
+    allIds: [
+      '681a3228-a410-4f7a-96cd-0d6d9274faf3',
+      'bae74c1a-94aa-46a5-8870-60d9552dfaa7',
+      'c92befdb-e556-4920-b3a8-39a272d98aff',
+      'aa847c1a-2e9b-4e73-9b4a-1ac3499580ee',
+      '4903997b-ef2f-48b4-9b6c-95c9655aa389',
+      'eb0e58e5-c948-44fc-975a-35fcf5204487',
+      '3c6c03-171-1cbc-86b3-1ccebe64d101',
+    ],
+  },
+  loading: true,
+}
 
 describe('Sections Reducer', () => {
   test('Set field value', () => {
@@ -27,7 +322,7 @@ describe('Sections Reducer', () => {
     const addedSection = state.sections.byId[state.sections.allIds[3]]
     expect(addedSection.name).toEqual('experience')
     expect(addedSection.fields.length).toEqual(1)
-    const addedField = addedSection.fields[0].fields[0][0]
+    const addedField = addedSection.fields[0][0][0]
     expect(state.fields.byId[addedField].name).toEqual('job_title')
   })
 
@@ -66,21 +361,12 @@ describe('Sections Reducer', () => {
     )
     const state = reducer(
       afterAddState,
-      moveSectionRow(
-        'fe0dfdf-048f-ed65-6db6-cbf45746f8e7',
-        'row_845c3b-08ef-c007-185d-c7311ec5622',
-        0
-      )
+      moveSectionRow('fe0dfdf-048f-ed65-6db6-cbf45746f8e7', 1, 0)
     )
     expect(state.sections.allIds.length).toEqual(3)
     expect(
       state.sections.nonFixedIds.indexOf('fe0dfdf-048f-ed65-6db6-cbf45746f8e7')
     ).toEqual(0)
-    const sectionFields =
-      state.sections.byId['fe0dfdf-048f-ed65-6db6-cbf45746f8e7'].fields
-    expect(sectionFields[0].name).toEqual(
-      'row_845c3b-08ef-c007-185d-c7311ec5622'
-    )
   })
 
   test('Delete section row', () => {
@@ -99,8 +385,5 @@ describe('Sections Reducer', () => {
     const sectionFields =
       state.sections.byId['fe0dfdf-048f-ed65-6db6-cbf45746f8e7'].fields
     expect(sectionFields.length).toEqual(1)
-    expect(sectionFields[0].name).toEqual(
-      'row_845c3b-08ef-c007-185d-c7311ec5622'
-    )
   })
 })

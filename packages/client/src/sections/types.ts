@@ -1,95 +1,9 @@
 import { Action } from 'redux'
-import { Node } from 'slate'
-import { Moment } from 'moment'
+import { GQLSection, CV } from 'freya-shared/schema'
 
-interface SectionFields {
-  name: string
-  fields: string[][]
-}
-
-export interface Section {
-  name: string
-  title: string
-  canMove: boolean
-  canRepeat: boolean
-  addLabel: string
-  fields: SectionFields[]
-}
-
-export type Field = BasicField | RichTextField | DateRangeField
-
-type FieldsRow = Field[][]
-
-export interface TemplateSection {
-  name: string
-  title: string
-  canMove: boolean
-  canRepeat: boolean
-  addLabel: string
-  fields: FieldsRow[]
-}
-
-export enum FieldType {
-  Text = 'text',
-  RichText = 'richtext',
-  Email = 'email',
-  Number = 'number',
-  Tel = 'tel',
-  Date = 'date',
-  DateRange = 'date-range',
-  File = 'file',
-}
-
-export interface BasicField {
-  name: string
-  title: string
-  type:
-    | FieldType.Text
-    | FieldType.Email
-    | FieldType.Number
-    | FieldType.Tel
-    | FieldType.Date
-    | FieldType.File
-  value: string
-  defaultValue: string
-}
-
-export interface RichTextField {
-  name: string
-  title: string
-  type: FieldType.RichText
-  value: Node[]
-  defaultValue: Node[]
-}
-
-export interface DateRangeField {
-  name: string
-  title: string
-  type: FieldType.DateRange
-  value: [Moment, Moment]
-  defaultValue: [Moment, Moment]
-}
-
-export interface State {
-  templates: {
-    sections: TemplateSection[]
-    inUse: string[]
-  }
-  sections: {
-    byId: { [key: string]: Section }
-    fixedIds: string[]
-    nonFixedIds: string[]
-    allIds: string[]
-  }
-  fields: {
-    byId: { [key: string]: Field }
-    allIds: string[]
-  }
-}
-
-export interface SectionsLoadedAction extends Action {
-  type: 'LOAD_SECTIONS'
-  payload: State
+export interface CVLoadedAction extends Action {
+  type: 'LOAD_CV'
+  payload: { cv: CV; sectionTemplates: GQLSection[] }
 }
 
 export interface FieldValueSetAction extends Action {
@@ -119,11 +33,11 @@ export interface SectionRowDeletedAction extends Action {
 
 export interface SectionRowMovedAction extends Action {
   type: 'MOVE_SECTION_ROW'
-  payload: { id: string; row: string; pos: number }
+  payload: { id: string; rowIdx: number; pos: number }
 }
 
 export type SectionsAction =
-  | SectionsLoadedAction
+  | CVLoadedAction
   | FieldValueSetAction
   | AddSectionAction
   | SectionMovedAction

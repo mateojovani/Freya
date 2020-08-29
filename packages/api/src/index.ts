@@ -52,7 +52,7 @@ server.applyMiddleware({ app })
   try {
     await connect()
     app.listen({ port: process.env.PORT || 4000 }, () =>
-      console.log(`🚀 Server ready at port: ${process.env.API_PORT}`)
+      console.log(`🚀 Server ready at port: ${process.env.PORT}`)
     )
   } catch (e) {
     console.log('Could not start server', e)

@@ -3,14 +3,15 @@ import '@testing-library/jest-dom'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
 import { AddSectionComponent } from './addSection'
-import { FieldType, TemplateSection } from '../types'
+import { Section, FieldType } from 'freya-shared/schema'
 
 const templates: {
-  sections: TemplateSection[]
+  sections: Section[]
   inUse: string[]
 } = {
   sections: [
     {
+      id: 'bio',
       name: 'bio',
       title: 'Personal information',
       canMove: false,
@@ -38,6 +39,7 @@ const templates: {
       ],
     },
     {
+      id: 'experience',
       name: 'experience',
       title: 'Work experience',
       canMove: true,

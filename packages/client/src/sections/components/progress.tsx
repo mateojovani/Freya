@@ -2,11 +2,11 @@ import * as React from 'react'
 import { FunctionComponent } from 'react'
 import { Anchor } from 'antd'
 
-import { Section } from '../types'
+import { NormalisedSection } from '../reducer'
 
 type ProgressProps = {
   sections: {
-    byId: { [key: string]: Section }
+    byId: { [key: string]: NormalisedSection }
     fixedIds: string[]
     nonFixedIds: string[]
     allIds: string[]

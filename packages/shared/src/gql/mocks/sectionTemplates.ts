@@ -1,5 +1,5 @@
 import { uuid } from 'uuidv4'
-import { FieldType, GQLSection } from 'freya-shared'
+import { FieldType, GQLSection } from '../../schema'
 
 const sectionTemplates: GQLSection[] = [
   {
@@ -73,6 +73,14 @@ const sectionTemplates: GQLSection[] = [
         ],
       ],
     ],
+    toTemplate() {
+      return this.fields[0]
+        .flatMap((row) => row.flatMap((fields) => fields))
+        .reduce((acc, field) => {
+          acc[field.name] = JSON.parse(field.value)
+          return acc
+        }, {})
+    },
   },
   {
     id: uuid(),
@@ -138,6 +146,16 @@ const sectionTemplates: GQLSection[] = [
         ],
       ],
     ],
+    toTemplate() {
+      return this.fields.map((subSection) =>
+        subSection
+          .flatMap((row) => row.flatMap((fields) => fields))
+          .reduce((acc, field) => {
+            acc[field.name] = JSON.parse(field.value)
+            return acc
+          }, {})
+      )
+    },
   },
   {
     id: uuid(),
@@ -203,6 +221,16 @@ const sectionTemplates: GQLSection[] = [
         ],
       ],
     ],
+    toTemplate() {
+      return this.fields.map((subSection) =>
+        subSection
+          .flatMap((row) => row.flatMap((fields) => fields))
+          .reduce((acc, field) => {
+            acc[field.name] = JSON.parse(field.value)
+            return acc
+          }, {})
+      )
+    },
   },
 ]
 

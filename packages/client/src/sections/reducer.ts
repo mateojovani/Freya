@@ -28,6 +28,8 @@ export interface State {
     byId: { [key: string]: Field }
     allIds: string[]
   }
+  cvId: string
+  hasChanges: boolean
   loading: boolean
 }
 
@@ -90,7 +92,35 @@ const normalize = (cv: CV, sectionTemplates: GQLSection[]): State => {
       })),
       inUse: sectionsAndFields.sections.allIds,
     },
+    cvId: cv.id,
+    hasChanges: false,
     loading: true,
+  }
+}
+
+export const denormalize = (state: State): CV => {
+  return {
+    id: state.cvId,
+    sections: state.sections.fixedIds.map((sectionId) => {
+      const section = state.sections.byId[sectionId]
+      return {
+        ...section,
+        id: sectionId,
+        fields: section.fields.map((subSection) =>
+          subSection.map((row) =>
+            row.map((fieldId) => {
+              const field = state.fields.byId[fieldId]
+              return {
+                ...field,
+                id: fieldId,
+                value: JSON.stringify(field.value),
+                defaultValue: JSON.stringify(field.defaultValue),
+              }
+            })
+          )
+        ),
+      }
+    }),
   }
 }
 
@@ -99,16 +129,26 @@ export default produce(
     switch (action.type) {
       case 'LOAD_CV': {
         const { cv, sectionTemplates } = action.payload
-        const { sections, fields, templates } = normalize(cv, sectionTemplates)
+        const { sections, fields, templates, cvId } = normalize(
+          cv,
+          sectionTemplates
+        )
         draft.sections = sections
         draft.fields = fields
         draft.templates = templates
+        draft.cvId = cvId
+        draft.hasChanges = false
         draft.loading = false
+        break
+      }
+      case 'SAVE_CV': {
+        draft.hasChanges = false
         break
       }
       case 'SET_FIELD_VALUE': {
         const { id, value } = action.payload
         draft.fields.byId[id].value = value
+        draft.hasChanges = true
         break
       }
       case 'ADD_SECTION': {
@@ -136,6 +176,7 @@ export default produce(
         template.canMove
           ? draft.sections.nonFixedIds.push(sectionId)
           : draft.sections.fixedIds.push(sectionId)
+        draft.hasChanges = true
         break
       }
       case 'MOVE_SECTION': {
@@ -146,6 +187,7 @@ export default produce(
         draggable[pos] = id
         draggable[currentIndex] = currentSection
         draft.sections.allIds = [...draft.sections.fixedIds, ...draggable]
+        draft.hasChanges = true
         break
       }
       case 'ADD_SECTION_ROW': {
@@ -167,6 +209,7 @@ export default produce(
         )
 
         section.fields.splice(mirrorRowIdx + 1, 0, repeated)
+        draft.hasChanges = true
         break
       }
       case 'DELETE_SECTION_ROW': {
@@ -179,6 +222,7 @@ export default produce(
             draft.fields.allIds.splice(draft.fields.allIds.indexOf(field), 1)
           })
         })
+        draft.hasChanges = true
         break
       }
       case 'MOVE_SECTION_ROW': {
@@ -188,9 +232,17 @@ export default produce(
         const movingRow = section.fields[rowIdx]
         section.fields[rowIdx] = currentRow
         section.fields[pos] = movingRow
+        draft.hasChanges = true
         break
       }
     }
   },
-  { templates: {}, fields: {}, sections: {}, loading: true }
+  {
+    templates: {},
+    fields: {},
+    sections: {},
+    cvId: null,
+    hasChanges: false,
+    loading: true,
+  }
 )

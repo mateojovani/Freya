@@ -6,6 +6,11 @@ export interface CVLoadedAction extends Action {
   payload: { cv: CV; sectionTemplates: GQLSection[] }
 }
 
+export interface CVSavedAction extends Action {
+  type: 'SAVE_CV'
+  payload: { cv: CV }
+}
+
 export interface FieldValueSetAction extends Action {
   type: 'SET_FIELD_VALUE'
   payload: { id: string; value: string }
@@ -38,6 +43,7 @@ export interface SectionRowMovedAction extends Action {
 
 export type SectionsAction =
   | CVLoadedAction
+  | CVSavedAction
   | FieldValueSetAction
   | AddSectionAction
   | SectionMovedAction

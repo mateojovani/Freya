@@ -31,6 +31,7 @@ const getCVPreview = async (): Promise<CVPreview> => {
   const template = compiledTemplate({ style, cv: mockCV.toTemplate() })
 
   const browser = await puppeteer.launch({
+    ignoreDefaultArgs: ['--disable-extensions'],
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   })
   const page = await browser.newPage()

@@ -30,7 +30,9 @@ const getCVPreview = async (): Promise<CVPreview> => {
   const compiledTemplate = Handlebars.compile(html)
   const template = compiledTemplate({ style, cv: mockCV.toTemplate() })
 
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  })
   const page = await browser.newPage()
   await page.setContent(template)
   // await page.pdf({ format: 'A4' })

@@ -10,9 +10,10 @@
     "client:start:dev": "yarn workspace freya-client start:dev",
     "client:test": "yarn workspace freya-client test",
     "client:test:watch": "yarn workspace freya-client test:watch",
-    "client:build": "yarn workspace freya-client build",
+    "client:build": "yarn shared:build && yarn workspace freya-client build",
     "api:start:dev": "yarn workspace freya-api start:dev",
-    "api:start": "yarn workspace freya-api start"
+    "api:start": "yarn workspace freya-api start",
+    "shared:build": "yarn workspace freya-shared build"
   },
   "workspaces": [
     "packages/*"

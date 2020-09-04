@@ -12,5 +12,8 @@
     "msw": "^0.20.5",
     "slate": "^0.58.4",
     "uuidv4": "^6.2.3"
+  },
+  "scripts": {
+    "build": "tsc --build"
   }
 }

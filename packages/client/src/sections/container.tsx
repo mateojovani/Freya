@@ -4,12 +4,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { Typography, Row, Col, Skeleton } from 'antd'
 import styled from 'styled-components'
-import { cvQuery } from 'freya-shared'
+import { cvQuery, saveCVMutation } from 'freya-shared'
 
-import { useQuery } from '../utils'
+import { useQuery, useMutation } from '../utils'
 import { AppState } from '../types'
 import { SectionsAction } from './types'
-import { State } from './reducer'
+import { State, denormalize } from './reducer'
 import {
   setFieldValue,
   moveSection,
@@ -18,11 +18,14 @@ import {
   deleteSectionRow,
   moveSectionRow,
   loadCV,
+  saveCV,
 } from './actions'
+import { loadCVPreview } from '../preview/actions'
 import { SectionComponentMemo } from './components/section'
 import { ProgressComponentMemo } from './components/progress'
 import { HandleComponent } from './components/actions'
 import { AddSectionComponent } from './components/addSection'
+import { CVPreviewAction } from '../preview/types'
 
 const getSectionsStyle = (isDragging: boolean) => {
   return {
@@ -48,17 +51,45 @@ const Actions = styled.div`
 `
 
 export const SectionsComponent: FunctionComponent = () => {
-  const dispatch = useDispatch<Dispatch<SectionsAction>>()
-  const { templates, sections, fields, loading } = useSelector<AppState, State>(
-    ({ sectionsView }) => sectionsView
-  )
+  const dispatch = useDispatch<Dispatch<SectionsAction | CVPreviewAction>>()
+  const {
+    cvId,
+    templates,
+    sections,
+    fields,
+    hasChanges,
+    loading,
+  } = useSelector<AppState, State>(({ sectionsView }) => sectionsView)
   const { response } = useQuery(cvQuery)
+  const [saveCVMut, { response: saveCVResp }] = useMutation(saveCVMutation)
 
   useEffect(() => {
     if (response) {
       dispatch(loadCV(response))
     }
   }, [response])
+
+  useEffect(() => {
+    if (saveCVResp) {
+      dispatch(saveCV(saveCVResp))
+      dispatch(loadCVPreview({ cvPreview: saveCVResp.saveCV }))
+    }
+  }, [saveCVResp])
+
+  useEffect(() => {
+    if (hasChanges) {
+      saveCVMut({
+        cv: denormalize({
+          cvId,
+          templates,
+          sections,
+          fields,
+          hasChanges,
+          loading,
+        }),
+      })
+    }
+  }, [hasChanges])
 
   const handleFieldChange = (id: string, value: string) => {
     dispatch(setFieldValue(id, value))
@@ -114,91 +145,70 @@ export const SectionsComponent: FunctionComponent = () => {
 
   if (loading) {
     return (
-      <Row gutter={[8, 8]}>
-        <Col
-          xs={24}
-          sm={24}
-          md={24}
-          lg={12}
-          xl={12}
-          xxl={{ span: 10, offset: 2 }}
-        >
-          <Skeleton />
-        </Col>
+      <Row>
+        <Skeleton />
       </Row>
     )
   }
 
   return (
-    <Row gutter={[8, 8]}>
-      <Col
-        xs={24}
-        sm={24}
-        md={24}
-        lg={12}
-        xl={12}
-        xxl={{ span: 10, offset: 2 }}
-      >
-        <Row>
-          <Col xs={0} sm={0} md={6} lg={8} xl={8}>
-            <ProgressComponentMemo sections={sections} />
-          </Col>
-          <Col xs={24} sm={24} md={18} lg={16} xl={16}>
-            <div style={{ padding: '20px 0px' }}>
-              {sections.fixedIds.map((section) => (
-                <div key={section} id={sections.byId[section].name}>
-                  {renderSection(section)}
-                </div>
-              ))}
-              <DragDropContext onDragEnd={handleDragEnd}>
-                <Droppable droppableId="droppable-sections">
-                  {(provided, snapshot) => (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      style={getSectionsStyle(snapshot.isDraggingOver)}
-                    >
-                      {sections.nonFixedIds.map((section, index) => (
-                        <Draggable
-                          key={section}
-                          draggableId={section}
-                          index={index}
-                        >
-                          {(provided, snapshot) => (
-                            <div
-                              id={sections.byId[section].name}
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              style={getSectionStyle(
-                                snapshot.isDragging,
-                                provided.draggableProps.style
-                              )}
-                            >
-                              <Actions>
-                                <HandleComponent
-                                  dragProps={provided.dragHandleProps}
-                                  size="small"
-                                />
-                              </Actions>
-                              {renderSection(section)}
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-              <AddSectionComponent
-                templates={templates}
-                addSection={handleAddSection}
-              />
-            </div>
-          </Col>
-        </Row>
+    <Row>
+      <Col xs={0} sm={0} md={6} lg={8} xl={8}>
+        <ProgressComponentMemo sections={sections} />
       </Col>
-      <Col lg={12} xl={12} xxl={10}></Col>
+      <Col xs={24} sm={24} md={18} lg={16} xl={16}>
+        <div style={{ padding: '20px 0px' }}>
+          {sections.fixedIds.map((section) => (
+            <div key={section} id={sections.byId[section].name}>
+              {renderSection(section)}
+            </div>
+          ))}
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId="droppable-sections">
+              {(provided, snapshot) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  style={getSectionsStyle(snapshot.isDraggingOver)}
+                >
+                  {sections.nonFixedIds.map((section, index) => (
+                    <Draggable
+                      key={section}
+                      draggableId={section}
+                      index={index}
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          id={sections.byId[section].name}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          style={getSectionStyle(
+                            snapshot.isDragging,
+                            provided.draggableProps.style
+                          )}
+                        >
+                          <Actions>
+                            <HandleComponent
+                              dragProps={provided.dragHandleProps}
+                              size="small"
+                            />
+                          </Actions>
+                          {renderSection(section)}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+          <AddSectionComponent
+            templates={templates}
+            addSection={handleAddSection}
+          />
+        </div>
+      </Col>
     </Row>
   )
 }

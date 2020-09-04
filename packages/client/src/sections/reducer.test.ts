@@ -1,7 +1,8 @@
-import { FieldType } from 'freya-shared'
+import { FieldType, cv, sectionTemplates } from 'freya-shared'
 
 import reducer, { State } from './reducer'
 import {
+  loadCV,
   setFieldValue,
   addSection,
   moveSection,
@@ -302,9 +303,32 @@ const sectionsMockNormalised: State = {
     ],
   },
   loading: true,
+  hasChanges: false,
+  cvId: 'mockCV',
 }
 
 describe('Sections Reducer', () => {
+  test('Load cv', () => {
+    const state = reducer(
+      {
+        templates: {},
+        fields: null,
+        sections: null,
+        cvId: null,
+        hasChanges: false,
+        loading: true,
+      },
+      loadCV({
+        cv,
+        sectionTemplates,
+      })
+    )
+    expect(state.loading).toEqual(false)
+    expect(state.hasChanges).toEqual(false)
+    expect(state.sections.allIds.length).toEqual(1)
+    expect(state.fields.allIds.length).toEqual(6)
+  })
+
   test('Set field value', () => {
     const state = reducer(
       sectionsMockNormalised,
@@ -313,6 +337,7 @@ describe('Sections Reducer', () => {
     expect(
       state.fields.byId['681a3228-a410-4f7a-96cd-0d6d9274faf3'].value
     ).toEqual('Loki')
+    expect(state.hasChanges).toEqual(true)
   })
 
   test('Add section', () => {
@@ -324,6 +349,7 @@ describe('Sections Reducer', () => {
     expect(addedSection.fields.length).toEqual(1)
     const addedField = addedSection.fields[0][0][0]
     expect(state.fields.byId[addedField].name).toEqual('job_title')
+    expect(state.hasChanges).toEqual(true)
   })
 
   test('Move section', () => {
@@ -337,6 +363,7 @@ describe('Sections Reducer', () => {
     expect(
       state.sections.nonFixedIds.indexOf('fe0dfdf-048f-ed65-6db6-cbf45746f8e7')
     ).toEqual(2)
+    expect(state.hasChanges).toEqual(true)
   })
 
   test('Add section row', () => {
@@ -352,6 +379,7 @@ describe('Sections Reducer', () => {
       state.sections.byId['fe0dfdf-048f-ed65-6db6-cbf45746f8e7'].fields
     expect(sectionFields.length).toEqual(2)
     expect(state.fields.allIds.length).toEqual(7)
+    expect(state.hasChanges).toEqual(true)
   })
 
   test('Move section row', () => {
@@ -367,6 +395,7 @@ describe('Sections Reducer', () => {
     expect(
       state.sections.nonFixedIds.indexOf('fe0dfdf-048f-ed65-6db6-cbf45746f8e7')
     ).toEqual(0)
+    expect(state.hasChanges).toEqual(true)
   })
 
   test('Delete section row', () => {
@@ -385,5 +414,6 @@ describe('Sections Reducer', () => {
     const sectionFields =
       state.sections.byId['fe0dfdf-048f-ed65-6db6-cbf45746f8e7'].fields
     expect(sectionFields.length).toEqual(1)
+    expect(state.hasChanges).toEqual(true)
   })
 })

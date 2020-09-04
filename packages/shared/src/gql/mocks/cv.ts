@@ -1,5 +1,5 @@
 import { uuid } from 'uuidv4'
-import { CV } from 'freya-shared'
+import { CV } from '../../schema'
 import { sectionTemplates } from './sectionTemplates'
 
 const fieldsWithId = sectionTemplates[0].fields.map((secFlds) =>
@@ -14,6 +14,13 @@ const cv: CV = {
       fields: fieldsWithId,
     },
   ],
+  toTemplate() {
+    return this.sections.reduce((acc, section) => {
+      acc[section.name] = section.toTemplate()
+
+      return acc
+    }, {})
+  },
 }
 
 export { cv }

@@ -19,3 +19,24 @@ export const useQuery = (query) => {
 
   return { response, error, isLoading }
 }
+
+export const useMutation = (
+  mutation
+): [(variables) => void, { response; error; isLoading }] => {
+  const [response, setResponse] = React.useState(null)
+  const [error, setError] = React.useState(null)
+  const [isLoading, setIsLoading] = React.useState(false)
+
+  const mutate = (variables = {}) => {
+    setIsLoading(true)
+    client
+      .request(mutation, variables)
+      .then((res) => {
+        setIsLoading(false)
+        setResponse(res)
+      })
+      .catch(setError)
+  }
+
+  return [mutate, { response, error, isLoading }]
+}

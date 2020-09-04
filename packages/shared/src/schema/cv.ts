@@ -63,6 +63,7 @@ interface GenericSection<T> {
   canRepeat: boolean
   addLabel: string
   fields: T[][][]
+  toTemplate?: () => any
 }
 
 type Section = GenericSection<Field>
@@ -72,6 +73,9 @@ type GQLSection = GenericSection<UnParsedField>
 interface CV {
   id: string
   sections: GQLSection[]
+  toTemplate?: () => any
 }
 
-export { CV, Section, FieldType, GQLSection, Field }
+type CVPreview = { url: string }
+
+export { CV, Section, FieldType, GQLSection, Field, CVPreview }

@@ -4,8 +4,9 @@
     "declarationMap": true,
     "sourceMap": true,
     "composite": true,
-    "rootDir": "./",
-    "skipLibCheck": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "skipLibCheck": true
   },
-  "include": ["./"]
+  "include": ["src"],
 }

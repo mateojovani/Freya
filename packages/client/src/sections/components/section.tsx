@@ -47,13 +47,16 @@ const FieldComponent: FunctionComponent<FieldProps> = ({
         />
       )
     case FieldType.DateRange:
-      const dates = field.value.map(date => {
-        if (typeof date === 'string') {
-          return moment(date)
-        }
+      const dates = field.value
+        ? field.value.map((date) => {
+            if (typeof date === 'string') {
+              return moment(date)
+            }
 
-        return date
-      })
+            return date
+          })
+        : null
+
       return (
         <DatePicker.RangePicker
           id={id}

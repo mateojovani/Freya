@@ -1,5 +1,5 @@
 import { Action } from 'redux'
-import { GQLSection, CV } from 'freya-shared'
+import { GQLSection, CV, CVPreview } from 'freya-shared'
 
 export interface CVLoadedAction extends Action {
   type: 'LOAD_CV'
@@ -8,7 +8,7 @@ export interface CVLoadedAction extends Action {
 
 export interface CVSavedAction extends Action {
   type: 'SAVE_CV'
-  payload: { cv: CV }
+  payload: { preview: CVPreview }
 }
 
 export interface FieldValueSetAction extends Action {
@@ -41,7 +41,7 @@ export interface SectionRowMovedAction extends Action {
   payload: { id: string; rowIdx: number; pos: number }
 }
 
-export type SectionsAction =
+export type ResumeEditorAction =
   | CVLoadedAction
   | CVSavedAction
   | FieldValueSetAction

@@ -30,6 +30,7 @@
     "graphql": "^15.3.0",
     "handlebars": "^4.7.6",
     "mongoose": "^5.10.0",
+    "pdf2pic": "^2.1.0",
     "puppeteer": "^5.2.1",
     "uuidv4": "^6.2.3"
   }

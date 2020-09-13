@@ -3,15 +3,12 @@ import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 import { render } from '@testing-library/react'
 
-import sectionsReducer from './sections/reducer'
-import previewReducer from './preview/reducer'
-import { SectionsAction } from './sections/types'
+import sectionsReducer from './editor/reducer'
+import { ResumeEditorAction } from './editor/types'
 import { AppState } from './types'
-import { CVPreviewAction } from './preview/types'
 
-const reducers = combineReducers<AppState, SectionsAction | CVPreviewAction>({
+const reducers = combineReducers<AppState, ResumeEditorAction>({
   sectionsView: sectionsReducer,
-  cvPreviewView: previewReducer,
 })
 
 export const renderWithStore = (
@@ -19,15 +16,12 @@ export const renderWithStore = (
   state = {
     sectionsView: {
       templates: null,
+      preview: { url: '' },
       sections: null,
       fields: null,
       loading: true,
       hasChanges: false,
       cvId: null,
-    },
-    cvPreviewView: {
-      cvPreview: { url: '' },
-      loading: true
     },
   }
 ) => {

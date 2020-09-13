@@ -1,9 +1,15 @@
-import moment = require('moment')
 import produce, { Draft } from 'immer'
 import { uuid } from 'uuidv4'
-import { Field, CV, Section, GQLSection, FieldType } from 'freya-shared'
+import {
+  Field,
+  CV,
+  Section,
+  GQLSection,
+  FieldType,
+  CVPreview,
+} from 'freya-shared'
 
-import { SectionsAction } from './types'
+import { ResumeEditorAction } from './types'
 
 export interface NormalisedSection {
   name: string
@@ -30,6 +36,7 @@ export interface State {
     allIds: string[]
   }
   cvId: string
+  preview: CVPreview
   hasChanges: boolean
   loading: boolean
 }
@@ -94,12 +101,13 @@ const normalize = (cv: CV, sectionTemplates: GQLSection[]): State => {
       inUse: sectionsAndFields.sections.allIds,
     },
     cvId: cv.id,
+    preview: cv.preview,
     hasChanges: false,
     loading: true,
   }
 }
 
-export const denormalize = (state: State): CV => {
+export const denormalize = (state: State): Partial<CV> => {
   const getSection = (id: string): GQLSection => {
     const section = state.sections.byId[id]
 
@@ -132,11 +140,11 @@ export const denormalize = (state: State): CV => {
 }
 
 export default produce(
-  (draft: Draft<State>, action: SectionsAction) => {
+  (draft: Draft<State>, action: ResumeEditorAction) => {
     switch (action.type) {
       case 'LOAD_CV': {
         const { cv, sectionTemplates } = action.payload
-        const { sections, fields, templates, cvId } = normalize(
+        const { sections, fields, templates, cvId, preview } = normalize(
           cv,
           sectionTemplates
         )
@@ -145,10 +153,12 @@ export default produce(
         draft.templates = templates
         draft.cvId = cvId
         draft.hasChanges = false
+        draft.preview = preview
         draft.loading = false
         break
       }
       case 'SAVE_CV': {
+        draft.preview = action.payload.preview
         draft.hasChanges = false
         break
       }
@@ -249,6 +259,7 @@ export default produce(
     fields: {},
     sections: {},
     cvId: null,
+    preview: { url: '' },
     hasChanges: false,
     loading: true,
   }

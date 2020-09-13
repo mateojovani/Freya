@@ -1,5 +1,5 @@
 import * as React from 'react'
-import '@testing-library/jest-dom'
+import '~/editor/node_modules/@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 
 import { AppHeader } from './container'

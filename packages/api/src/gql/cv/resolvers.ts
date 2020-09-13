@@ -4,6 +4,7 @@ import path from 'path'
 import Handlebars from 'handlebars'
 import puppeteer from 'puppeteer'
 import { sectionTemplates, cv, CV, GQLSection, CVPreview } from 'freya-shared'
+import { fromBuffer } from 'pdf2pic'
 
 const readFile = util.promisify(fs.readFile)
 
@@ -29,7 +30,8 @@ const getCVPreview = async (): Promise<CVPreview> => {
   })
   const page = await browser.newPage()
   await page.setContent(template)
-  // await page.pdf({ format: 'A4' })
+  // const pdf = await page.pdf({ format: 'A4' })
+  // const image = await fromBuffer(pdf).bulk(-1, true)[0]
   const image = await page.screenshot({
     encoding: 'base64',
     fullPage: true,
@@ -43,17 +45,19 @@ let mockCV = cv
 
 const cvResolvers = {
   Query: {
-    cv: (_, { id } : { id: string }): CV => mockCV,
+    cv: async (_, { id }: { id: string }): Promise<CV> => {
+      return { ...mockCV, preview: await getCVPreview() }
+    },
     sectionTemplates: (): GQLSection[] => sectionTemplates,
-    cvPreview: getCVPreview,
   },
   Mutation: {
-    saveCV: async (_, { cv }: { cv: CV }): Promise<CVPreview> => {
+    saveCV: async (_, { cv }: { cv: CV }): Promise<CV> => {
       const getTemplate = (name: string) =>
         sectionTemplates.find((t) => t.name === name)
 
       mockCV = {
         ...mockCV,
+        preview: null,
         sections: cv.sections.map((section, i) => {
           return {
             ...mockCV.sections[i],
@@ -63,9 +67,14 @@ const cvResolvers = {
         }),
       }
 
-      return getCVPreview()
+      mockCV.preview = await getCVPreview()
+
+      return mockCV
     },
-    createCV: async (_, { template }: { template?: string }): Promise<string> => {
+    createCV: async (
+      _,
+      { template }: { template?: string }
+    ): Promise<string> => {
       return mockCV.id
     },
   },

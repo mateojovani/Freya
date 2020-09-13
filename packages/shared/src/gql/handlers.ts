@@ -1,6 +1,6 @@
 import { graphql } from 'msw'
 
-import { sectionTemplates, cv, cvPreview } from './mocks'
+import { sectionTemplates, cv } from './mocks'
 
 const handlers: any = [
   graphql.query('GET_CV', (_, res, ctx) => {
@@ -8,7 +8,6 @@ const handlers: any = [
       ctx.data({
         cv,
         sectionTemplates,
-        cvPreview,
       })
     )
   }),

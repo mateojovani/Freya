@@ -9,21 +9,7 @@ import {
 
 import { AppHeader } from '../header/container'
 import { Library } from '../library/container'
-import { SectionsComponent } from '../sections/container'
-import { PreviewComponent } from '../preview/container'
-
-const ResumeEditor = () => (
-  <Row gutter={[8, 8]}>
-    <Col xs={24} sm={24} md={24} lg={12} xl={12} xxl={{ span: 10, offset: 2 }}>
-      <SectionsComponent />
-    </Col>
-    <Col lg={{ span: 11, offset: 1 }} xl={{ span: 11, offset: 1 }} xxl={10}>
-      <Affix offsetTop={0}>
-        <PreviewComponent />
-      </Affix>
-    </Col>
-  </Row>
-)
+import { ResumeEditor } from '../editor/container'
 
 const Header = () => {
   const history = useHistory()
@@ -45,7 +31,7 @@ export const Main = () => {
     <Router>
       <Header />
       <Layout>
-        <Layout.Content style={{ padding: '0 50px', background: 'white' }}>
+        <Layout.Content style={{ padding: '0 0 0 10px', background: 'white' }}>
           <Switch>
             <Route exact path="/">
               <Library />

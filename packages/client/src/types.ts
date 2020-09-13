@@ -1,7 +1,5 @@
-import { State as SectionsState } from './sections/reducer'
-import { State as CVPreviewState } from './preview/reducer'
+import { State as SectionsState } from './editor/reducer'
 
 export interface AppState {
   sectionsView: SectionsState
-  cvPreviewView: CVPreviewState
 }

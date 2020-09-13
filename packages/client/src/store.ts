@@ -1,20 +1,14 @@
 import { combineReducers, createStore, Store } from 'redux'
 
-import sectionsReducer from './sections/reducer'
-import cvPreviewReducer from './preview/reducer'
-import { SectionsAction } from './sections/types'
+import sectionsReducer from './editor/reducer'
+import { ResumeEditorAction } from './editor/types'
 import { AppState } from './types'
-import { CVPreviewAction } from './preview/types'
 
 const reducers = combineReducers({
   sectionsView: sectionsReducer,
-  cvPreviewView: cvPreviewReducer,
 })
 
-export default function configureStore(): Store<
-  AppState,
-  SectionsAction & CVPreviewAction
-> {
+export default function configureStore(): Store<AppState, ResumeEditorAction> {
   return createStore(
     reducers,
     // @ts-ignore

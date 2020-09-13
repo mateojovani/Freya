@@ -4,6 +4,9 @@ const cvQuery = gql`
   query GET_CV($id: ID!) {
     cv(id: $id) {
       id
+      preview {
+        url
+      }
       sections {
         id
         name
@@ -42,7 +45,9 @@ const cvQuery = gql`
 const saveCVMutation = gql`
   mutation SAVE_CV($cv: CVInput!) {
     saveCV(cv: $cv) {
-      url
+      preview {
+        url
+      }
     }
   }
 `

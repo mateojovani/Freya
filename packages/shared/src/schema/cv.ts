@@ -70,12 +70,13 @@ type Section = GenericSection<Field>
 
 type GQLSection = GenericSection<UnParsedField>
 
+type CVPreview = { url: string }
+
 interface CV {
   id: string
   sections: GQLSection[]
+  preview: CVPreview
   toTemplate?: () => any
 }
-
-type CVPreview = { url: string }
 
 export { CV, Section, FieldType, GQLSection, Field, CVPreview }

@@ -10,7 +10,7 @@ import {
   SectionRowMovedAction,
   CVSavedAction,
 } from './types'
-import { CV, GQLSection } from 'freya-shared'
+import { CV, CVPreview, GQLSection } from 'freya-shared'
 
 export const loadCV: ActionCreator<CVLoadedAction> = ({
   cv,
@@ -26,10 +26,14 @@ export const loadCV: ActionCreator<CVLoadedAction> = ({
   },
 })
 
-export const saveCV: ActionCreator<CVSavedAction> = ({ cv }: { cv: CV }) => ({
+export const saveCV: ActionCreator<CVSavedAction> = ({
+  preview,
+}: {
+  preview: CVPreview
+}) => ({
   type: 'SAVE_CV',
   payload: {
-    cv,
+    preview,
   },
 })
 

@@ -20,13 +20,14 @@ const cvTypes = gql`
     fields: [[[Field]]]
   }
 
+  type CVPreview {
+    url: String!
+  }
+
   type CV {
     id: ID!
     sections: [Section]!
-  }
-
-  type CVPreview {
-    url: String!
+    preview: CVPreview!
   }
 
   input FieldInput {
@@ -56,11 +57,10 @@ const cvTypes = gql`
   type Query {
     cv(id: ID!): CV!
     sectionTemplates: [Section]!
-    cvPreview: CVPreview!
   }
 
   type Mutation {
-    saveCV(cv: CVInput!): CVPreview
+    saveCV(cv: CVInput!): CV
     createCV(template: String): ID
   }
 `

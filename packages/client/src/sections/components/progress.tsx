@@ -3,6 +3,7 @@ import { FunctionComponent } from 'react'
 import { Anchor } from 'antd'
 
 import { NormalisedSection } from '../reducer'
+import styled from 'styled-components'
 
 type ProgressProps = {
   sections: {
@@ -13,8 +14,14 @@ type ProgressProps = {
   }
 }
 
+const StyledProgress = styled(Anchor)`
+  .ant-anchor {
+    font-size: 14px
+  }
+`
+
 const ProgressComponent: FunctionComponent<ProgressProps> = ({ sections }) => (
-  <Anchor>
+  <StyledProgress>
     {sections.allIds.map((section) => (
       <Anchor.Link
         key={section}
@@ -22,7 +29,7 @@ const ProgressComponent: FunctionComponent<ProgressProps> = ({ sections }) => (
         title={sections.byId[section].title}
       />
     ))}
-  </Anchor>
+  </StyledProgress>
 )
 
 export const ProgressComponentMemo = React.memo(ProgressComponent)

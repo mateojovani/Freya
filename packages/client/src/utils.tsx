@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { client } from 'freya-shared'
 
-export const useQuery = (query) => {
+export const useQuery = (query, variables?) => {
   const [response, setResponse] = React.useState(null)
   const [error, setError] = React.useState(null)
   const [isLoading, setIsLoading] = React.useState(false)
@@ -9,7 +9,7 @@ export const useQuery = (query) => {
   React.useEffect(() => {
     setIsLoading(true)
     client
-      .request(query)
+      .request(query, variables)
       .then((res) => {
         setIsLoading(false)
         setResponse(res)

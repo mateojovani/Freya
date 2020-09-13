@@ -1,3 +1,4 @@
+import moment = require('moment')
 import * as React from 'react'
 import { FunctionComponent, useCallback } from 'react'
 import { Row, Col, Form, Input, Button, DatePicker } from 'antd'
@@ -46,12 +47,20 @@ const FieldComponent: FunctionComponent<FieldProps> = ({
         />
       )
     case FieldType.DateRange:
+      const dates = field.value.map(date => {
+        if (typeof date === 'string') {
+          return moment(date)
+        }
+
+        return date
+      })
       return (
         <DatePicker.RangePicker
           id={id}
           picker="month"
           allowEmpty={[false, true]}
-          value={field.value}
+          // @ts-ignore
+          value={dates}
           onChange={(dates) => handleChange(id, dates)}
           onPanelChange={(dates) => handleChange(id, dates)}
         />

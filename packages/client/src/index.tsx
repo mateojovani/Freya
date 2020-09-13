@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import './index.css'
+import './index.less'
 
 import configureStore from './store'
 import { Main } from './main/container'

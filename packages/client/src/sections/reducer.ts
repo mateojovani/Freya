@@ -1,6 +1,7 @@
+import moment = require('moment')
 import produce, { Draft } from 'immer'
 import { uuid } from 'uuidv4'
-import { Field, CV, Section, GQLSection } from 'freya-shared'
+import { Field, CV, Section, GQLSection, FieldType } from 'freya-shared'
 
 import { SectionsAction } from './types'
 
@@ -99,28 +100,34 @@ const normalize = (cv: CV, sectionTemplates: GQLSection[]): State => {
 }
 
 export const denormalize = (state: State): CV => {
+  const getSection = (id: string): GQLSection => {
+    const section = state.sections.byId[id]
+
+    return {
+      ...section,
+      id,
+      fields: section.fields.map((subSection) =>
+        subSection.map((row) =>
+          row.map((fieldId) => {
+            const field = state.fields.byId[fieldId]
+            return {
+              ...field,
+              id: fieldId,
+              value: JSON.stringify(field.value),
+              defaultValue: JSON.stringify(field.defaultValue),
+            }
+          })
+        )
+      ),
+    }
+  }
+
   return {
     id: state.cvId,
-    sections: state.sections.fixedIds.map((sectionId) => {
-      const section = state.sections.byId[sectionId]
-      return {
-        ...section,
-        id: sectionId,
-        fields: section.fields.map((subSection) =>
-          subSection.map((row) =>
-            row.map((fieldId) => {
-              const field = state.fields.byId[fieldId]
-              return {
-                ...field,
-                id: fieldId,
-                value: JSON.stringify(field.value),
-                defaultValue: JSON.stringify(field.defaultValue),
-              }
-            })
-          )
-        ),
-      }
-    }),
+    sections: [
+      ...state.sections.fixedIds.map(getSection),
+      ...state.sections.nonFixedIds.map(getSection),
+    ],
   }
 }
 

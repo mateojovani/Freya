@@ -5,6 +5,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { Typography, Row, Col, Skeleton } from 'antd'
 import styled from 'styled-components'
 import { cvQuery, saveCVMutation } from 'freya-shared'
+import { useParams } from 'react-router-dom'
 
 import { useQuery, useMutation } from '../utils'
 import { AppState } from '../types'
@@ -60,7 +61,8 @@ export const SectionsComponent: FunctionComponent = () => {
     hasChanges,
     loading,
   } = useSelector<AppState, State>(({ sectionsView }) => sectionsView)
-  const { response } = useQuery(cvQuery)
+  const params = useParams<{ id: string }>()
+  const { response } = useQuery(cvQuery, { id: params.id })
   const [saveCVMut, { response: saveCVResp }] = useMutation(saveCVMutation)
 
   useEffect(() => {
@@ -78,18 +80,20 @@ export const SectionsComponent: FunctionComponent = () => {
 
   useEffect(() => {
     if (hasChanges) {
-      saveCVMut({
-        cv: denormalize({
-          cvId,
-          templates,
-          sections,
-          fields,
-          hasChanges,
-          loading,
-        }),
-      })
+      setTimeout(() => {
+        saveCVMut({
+          cv: denormalize({
+            cvId,
+            templates,
+            sections,
+            fields,
+            hasChanges,
+            loading,
+          }),
+        })
+      }, 500)
     }
-  }, [hasChanges])
+  }, [hasChanges, fields])
 
   const handleFieldChange = (id: string, value: string) => {
     dispatch(setFieldValue(id, value))

@@ -43,20 +43,30 @@ let mockCV = cv
 
 const cvResolvers = {
   Query: {
-    cv: (): CV => mockCV,
+    cv: (_, { id } : { id: string }): CV => mockCV,
     sectionTemplates: (): GQLSection[] => sectionTemplates,
     cvPreview: getCVPreview,
   },
   Mutation: {
     saveCV: async (_, { cv }: { cv: CV }): Promise<CVPreview> => {
+      const getTemplate = (name: string) =>
+        sectionTemplates.find((t) => t.name === name)
+
       mockCV = {
         ...mockCV,
         sections: cv.sections.map((section, i) => {
-          return { ...mockCV.sections[i], ...section }
+          return {
+            ...mockCV.sections[i],
+            ...section,
+            toTemplate: getTemplate(section.name).toTemplate.bind(section),
+          }
         }),
       }
 
       return getCVPreview()
+    },
+    createCV: async (_, { template }: { template?: string }): Promise<string> => {
+      return mockCV.id
     },
   },
 }

@@ -54,13 +54,14 @@ const cvTypes = gql`
   }
 
   type Query {
-    cv: CV!
+    cv(id: ID!): CV!
     sectionTemplates: [Section]!
     cvPreview: CVPreview!
   }
 
   type Mutation {
     saveCV(cv: CVInput!): CVPreview
+    createCV(template: String): ID
   }
 `
 

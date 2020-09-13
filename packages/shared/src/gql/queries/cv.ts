@@ -1,8 +1,8 @@
 import { gql } from 'graphql-request'
 
 const cvQuery = gql`
-  query GET_CV {
-    cv {
+  query GET_CV($id: ID!) {
+    cv(id: $id) {
       id
       sections {
         id
@@ -39,4 +39,18 @@ const cvQuery = gql`
   }
 `
 
-export { cvQuery }
+const saveCVMutation = gql`
+  mutation SAVE_CV($cv: CVInput!) {
+    saveCV(cv: $cv) {
+      url
+    }
+  }
+`
+
+const createCVMutation = gql`
+  mutation CREATE_CV($template: String) {
+    createCV(template: $template)
+  }
+`
+
+export { cvQuery, saveCVMutation, createCVMutation }

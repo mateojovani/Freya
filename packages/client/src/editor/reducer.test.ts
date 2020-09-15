@@ -9,9 +9,10 @@ import {
   addSectionRow,
   moveSectionRow,
   deleteSectionRow,
+  saveCV,
 } from './actions'
 
-const sectionsMockNormalised: State = {
+const mockCV: State = {
   templates: {
     sections: [
       {
@@ -305,6 +306,7 @@ const sectionsMockNormalised: State = {
   loading: true,
   hasChanges: false,
   cvId: 'mockCV',
+  preview: { url: '' },
 }
 
 describe('Sections Reducer', () => {
@@ -317,6 +319,9 @@ describe('Sections Reducer', () => {
         cvId: null,
         hasChanges: false,
         loading: true,
+        preview: {
+          url: '',
+        },
       },
       loadCV({
         cv,
@@ -329,9 +334,20 @@ describe('Sections Reducer', () => {
     expect(state.fields.allIds.length).toEqual(6)
   })
 
+  test('Save cv', () => {
+    const state = reducer(
+      mockCV,
+      saveCV({
+        preview: { url: 'image' },
+      })
+    )
+    expect(state.hasChanges).toEqual(false)
+    expect(state.preview.url).toEqual('image')
+  })
+
   test('Set field value', () => {
     const state = reducer(
-      sectionsMockNormalised,
+      mockCV,
       setFieldValue('681a3228-a410-4f7a-96cd-0d6d9274faf3', 'Loki')
     )
     expect(
@@ -341,7 +357,7 @@ describe('Sections Reducer', () => {
   })
 
   test('Add section', () => {
-    const state = reducer(sectionsMockNormalised, addSection(1))
+    const state = reducer(mockCV, addSection(1))
     expect(state.sections.allIds.length).toEqual(4)
     expect(state.sections.nonFixedIds.length).toEqual(3)
     const addedSection = state.sections.byId[state.sections.allIds[3]]
@@ -354,7 +370,7 @@ describe('Sections Reducer', () => {
 
   test('Move section', () => {
     const state = reducer(
-      sectionsMockNormalised,
+      mockCV,
       moveSection('fe0dfdf-048f-ed65-6db6-cbf45746f8e7', 2)
     )
     expect(
@@ -368,7 +384,7 @@ describe('Sections Reducer', () => {
 
   test('Add section row', () => {
     const state = reducer(
-      sectionsMockNormalised,
+      mockCV,
       addSectionRow('fe0dfdf-048f-ed65-6db6-cbf45746f8e7', 0, true)
     )
     expect(state.sections.allIds.length).toEqual(3)
@@ -384,7 +400,7 @@ describe('Sections Reducer', () => {
 
   test('Move section row', () => {
     const afterAddState = reducer(
-      sectionsMockNormalised,
+      mockCV,
       addSectionRow('fe0dfdf-048f-ed65-6db6-cbf45746f8e7', 0)
     )
     const state = reducer(
@@ -400,7 +416,7 @@ describe('Sections Reducer', () => {
 
   test('Delete section row', () => {
     const afterAddState = reducer(
-      sectionsMockNormalised,
+      mockCV,
       addSectionRow('fe0dfdf-048f-ed65-6db6-cbf45746f8e7', 0)
     )
     const state = reducer(

@@ -1,18 +1,18 @@
 import * as React from 'react'
-import '~/editor/node_modules/@testing-library/jest-dom'
+import '@testing-library/jest-dom'
+import { MemoryRouter } from 'react-router-dom'
 
 import { Main } from './container'
 import { renderWithStore } from '../testUtils'
 import { waitFor, screen } from '@testing-library/react'
 
 describe('Main', () => {
-  test('basic config', async () => {
-    const { container } = renderWithStore(<Main />)
+  test('dashboard', async () => {
+    const { container } = renderWithStore(<Main />, MemoryRouter)
     await waitFor(() => [
-      screen.getAllByText(/Personal information/i),
-      screen.getByTestId('preview'),
+      screen.getByText(/Get started/i)
     ])
     expect(container).toBeInTheDocument()
-    expect(screen.getByTestId('preview')).toBeInTheDocument()
+    expect(screen.getByText(/Get started/i)).toBeInTheDocument()
   })
 })

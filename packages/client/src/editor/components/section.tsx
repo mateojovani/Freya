@@ -41,7 +41,7 @@ const FieldComponent: FunctionComponent<FieldProps> = ({
     case FieldType.RichText:
       return (
         <EditorComponent
-          id={id}
+          id={field.name}
           value={field.value}
           onChange={(value) => handleChange(id, value)}
         />
@@ -59,7 +59,7 @@ const FieldComponent: FunctionComponent<FieldProps> = ({
 
       return (
         <DatePicker.RangePicker
-          id={id}
+          id={field.name}
           picker="month"
           allowEmpty={[false, true]}
           // @ts-ignore
@@ -71,7 +71,7 @@ const FieldComponent: FunctionComponent<FieldProps> = ({
     default:
       return (
         <Input
-          id={id}
+          id={field.name}
           value={field.value}
           type={field.type}
           onChange={(ev) => handleChange(id, ev.target.value)}

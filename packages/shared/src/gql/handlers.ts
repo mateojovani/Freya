@@ -11,6 +11,17 @@ const handlers: any = [
       })
     )
   }),
+  graphql.mutation('SAVE_CV', (_, res, ctx) => {
+    return res(
+      ctx.data({
+        saveCV: {
+          preview: {
+            url: 'image-after-save',
+          },
+        },
+      })
+    )
+  }),
 ]
 
 export { handlers }

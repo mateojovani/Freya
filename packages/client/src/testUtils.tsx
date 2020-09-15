@@ -13,6 +13,7 @@ const reducers = combineReducers<AppState, ResumeEditorAction>({
 
 export const renderWithStore = (
   Component,
+  wrapper: React.ComponentType = null,
   state = {
     sectionsView: {
       templates: null,
@@ -26,5 +27,5 @@ export const renderWithStore = (
   }
 ) => {
   const store = createStore(reducers, state)
-  return render(<Provider store={store}>{Component}</Provider>)
+  return render(<Provider store={store}>{Component}</Provider>, { wrapper })
 }

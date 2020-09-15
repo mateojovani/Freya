@@ -1,5 +1,5 @@
 import * as React from 'react'
-import '~/editor/node_modules/@testing-library/jest-dom'
+import '@testing-library/jest-dom'
 import { render, screen, waitFor } from '@testing-library/react'
 
 import { PreviewComponent } from './preview'

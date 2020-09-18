@@ -1,5 +1,6 @@
 import { uuid } from 'uuidv4'
 import { FieldType, GQLSection } from '../../schema'
+import { renderEditor } from '../../editor'
 
 const sectionTemplates: GQLSection[] = [
   {
@@ -77,6 +78,11 @@ const sectionTemplates: GQLSection[] = [
       return this.fields[0]
         .flatMap((row) => row.flatMap((fields) => fields))
         .reduce((acc, field) => {
+          if (field.type === 'richtext') {
+            const editor = renderEditor(JSON.parse(field.value))
+            acc[field.name] = editor
+            return acc
+          }
           acc[field.name] = JSON.parse(field.value)
           return acc
         }, {})
@@ -151,6 +157,11 @@ const sectionTemplates: GQLSection[] = [
         subSection
           .flatMap((row) => row.flatMap((fields) => fields))
           .reduce((acc, field) => {
+            if (field.type === 'richtext') {
+              const editor = renderEditor(JSON.parse(field.value))
+              acc[field.name] = editor
+              return acc
+            }
             acc[field.name] = JSON.parse(field.value)
             return acc
           }, {})
@@ -226,6 +237,11 @@ const sectionTemplates: GQLSection[] = [
         subSection
           .flatMap((row) => row.flatMap((fields) => fields))
           .reduce((acc, field) => {
+            if (field.type === 'richtext') {
+              const editor = renderEditor(JSON.parse(field.value))
+              acc[field.name] = editor
+              return acc
+            }
             acc[field.name] = JSON.parse(field.value)
             return acc
           }, {})

@@ -4,6 +4,7 @@ import { useCallback, useMemo } from 'react'
 import { Editable, withReact, Slate } from 'slate-react'
 import { createEditor, Node } from 'slate'
 import { withHistory } from 'slate-history'
+import styled from 'styled-components'
 
 import {
   MarkButton,
@@ -13,7 +14,6 @@ import {
   MarkFormat,
   BlockFormat,
 } from './editorToolbar'
-import styled from 'styled-components'
 
 type EditorProps = {
   id: string

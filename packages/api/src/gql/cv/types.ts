@@ -20,8 +20,12 @@ const cvTypes = gql`
     fields: [[[Field]]]
   }
 
+  type Image {
+    base64: String!
+  }
+
   type CVPreview {
-    url: String!
+    urls: [Image]!
   }
 
   type CV {

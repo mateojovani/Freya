@@ -235,7 +235,7 @@ export const ResumeEditor: FunctionComponent = () => {
       </Col>
       <Col lg={{ span: 11, offset: 1 }} xl={{ span: 11, offset: 1 }} xxl={10}>
         <Affix offsetTop={0}>
-          <PreviewComponent url={preview.url} />
+          <PreviewComponent source={preview} />
         </Affix>
       </Col>
     </Row>

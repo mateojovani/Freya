@@ -595,7 +595,6 @@
     #inner {
       padding: 10px 80px;
       background: #f5f5f5;
-      border: solid #666;
       border-width: 8px 0 2px 0;
     }
 
@@ -719,20 +718,20 @@
       background: #222;
     }
 
-    .job {
+    .job, .education {
       position: relative;
       margin-bottom: 1em;
       padding-bottom: 1em;
       border-bottom: 1px solid #ccc;
     }
 
-    .job h4 {
+    .job h4, .education h4 {
       position: absolute;
       top: 0.35em;
       right: 0;
     }
 
-    .job p {
+    .job p, .education p {
       margin: 0.75em 0 3em 0;
     }
 
@@ -817,14 +816,13 @@
               </div>
               <div class="yui-u">
                 <p class="enlarge">
-                  Progressively evolve cross-platform ideas before impactful infomediaries. Energistically visualize
-                  tactical initiatives before cross-media catalysts for change.
+                  {{{ cv.bio.summary }}}
                 </p>
               </div>
             </div>
             <!--// .yui-gf -->
 
-            <div class="yui-gf">
+            {{!-- <div class="yui-gf">
               <div class="yui-u first">
                 <h2>Skills</h2>
               </div>
@@ -846,10 +844,10 @@
                     independent situations.</p>
                 </div>
               </div>
-            </div>
+            </div> --}}
             <!--// .yui-gf -->
 
-            <div class="yui-gf">
+            {{!-- <div class="yui-gf">
               <div class="yui-u first">
                 <h2>Technical</h2>
               </div>
@@ -872,7 +870,7 @@
                   <li class="last">Linux</li>
                 </ul>
               </div>
-            </div>
+            </div> --}}
             <!--// .yui-gf-->
 
             <div class="yui-gf">
@@ -883,45 +881,15 @@
               <!--// .yui-u -->
 
               <div class="yui-u">
-
+                {{#each cv.experience}}
                 <div class="job">
-                  <h2>Facebook</h2>
-                  <h3>Senior Interface Designer</h3>
-                  <h4>2005-2007</h4>
-                  <p>Intrinsicly enable optimal core competencies through corporate relationships. Phosfluorescently
-                    implement worldwide vortals and client-focused imperatives. Conveniently initiate virtual paradigms
-                    and top-line convergence. </p>
+                  <!-- last -->
+                  <h2>{{this.company}}</h2>
+                  <h3>{{this.job_title}}</h3>
+                  <h4> {{#each this.start_end_date}} {{#if @index }} - {{/if}} {{this}} {{/each}}</h4>
+                  <p>{{{this.job_desc}}}</p>
                 </div>
-
-                <div class="job">
-                  <h2>Apple Inc.</h2>
-                  <h3>Senior Interface Designer</h3>
-                  <h4>2005-2007</h4>
-                  <p>Progressively reconceptualize multifunctional "outside the box" thinking through inexpensive
-                    methods of empowerment. Compellingly morph extensive niche markets with mission-critical ideas.
-                    Phosfluorescently deliver bricks-and-clicks strategic theme areas rather than scalable benefits.
-                  </p>
-                </div>
-
-                <div class="job">
-                  <h2>Microsoft</h2>
-                  <h3>Principal and Creative Lead</h3>
-                  <h4>2004-2005</h4>
-                  <p>Intrinsicly transform flexible manufactured products without excellent intellectual capital.
-                    Energistically evisculate orthogonal architectures through covalent action items. Assertively
-                    incentivize sticky platforms without synergistic materials. </p>
-                </div>
-
-
-                <div class="job last">
-                  <h2>International Business Machines (IBM)</h2>
-                  <h3>Lead Web Designer</h3>
-                  <h4>2001-2004</h4>
-                  <p>Globally re-engineer cross-media schemas through viral methods of empowerment. Proactively grow
-                    long-term high-impact human capital and highly efficient innovation. Intrinsicly iterate excellent
-                    e-tailers with timely e-markets.</p>
-                </div>
-
+                {{/each}}
               </div>
               <!--// .yui-u -->
             </div>
@@ -933,8 +901,14 @@
                 <h2>Education</h2>
               </div>
               <div class="yui-u">
-                <h2>Indiana University - Bloomington, Indiana</h2>
-                <h3>Dual Major, Economics and English &mdash; <strong>4.0 GPA</strong> </h3>
+                {{#each cv.education}}
+                <div class="education">
+                  <h2>{{this.school}}</h2>
+                  <h3>{{this.degree}}</h3>
+                  <h4> {{#each this.sc_start_end_date}} {{#if @index }} - {{/if}} {{this}} {{/each}}</h4>
+                  <p>{{{this.sc_desc}}}</p>
+                </div>
+                {{/each}}
               </div>
             </div>
             <!--// .yui-gf -->
@@ -948,7 +922,8 @@
       <!--// bd -->
 
       <div id="ft">
-        <p>Jonathan Doe &mdash; <a href="mailto:name@yourdomain.com">name@yourdomain.com</a> &mdash; (313) - 867-5309
+        <p>{{ cv.bio.firstName }} {{ cv.bio.lastName }} &mdash; <a
+            href="mailto:name@yourdomain.com">{{ cv.bio.email }}</a> &mdash; {{ cv.bio.phone }}
         </p>
       </div>
       <!--// footer -->

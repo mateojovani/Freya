@@ -259,7 +259,7 @@ export default produce(
     fields: {},
     sections: {},
     cvId: null,
-    preview: { url: '' },
+    preview: { urls: [{ base64: '' }] },
     hasChanges: false,
     loading: true,
   }

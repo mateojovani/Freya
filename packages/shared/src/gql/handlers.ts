@@ -16,7 +16,7 @@ const handlers: any = [
       ctx.data({
         saveCV: {
           preview: {
-            url: 'image-after-save',
+            urls: [{ base64: 'image-after-save' }],
           },
         },
       })

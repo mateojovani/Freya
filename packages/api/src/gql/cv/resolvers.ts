@@ -30,18 +30,19 @@ const getCVPreview = async (): Promise<CVPreview> => {
   })
   const page = await browser.newPage()
   await page.setContent(template)
-  // const pdf = await page.pdf({ format: 'A4' })
-  // const image = await fromBuffer(pdf).bulk(-1, true)[0]
-  const image = await page.screenshot({
-    encoding: 'base64',
-    fullPage: true,
-  })
+  const pdf = await page.pdf({ format: 'A4' })
+  const images = (await fromBuffer(pdf, {
+    quality: 80,
+    density: 290,
+    width: 1024,
+    height: 1268,
+  }).bulk(-1, true)) as { base64: string }[]
   await browser.close()
 
-  return { url: image }
+  return { urls: images }
 }
 
-let mockCV = cv
+let mockCV = { ...cv }
 
 const cvResolvers = {
   Query: {
@@ -75,6 +76,7 @@ const cvResolvers = {
       _,
       { template }: { template?: string }
     ): Promise<string> => {
+      mockCV = { ...cv }
       return mockCV.id
     },
   },

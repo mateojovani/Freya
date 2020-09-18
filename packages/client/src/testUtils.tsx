@@ -17,7 +17,7 @@ export const renderWithStore = (
   state = {
     sectionsView: {
       templates: null,
-      preview: { url: '' },
+      preview: { urls: [{ base64: '' }] },
       sections: null,
       fields: null,
       loading: true,

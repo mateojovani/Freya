@@ -306,7 +306,7 @@ const mockCV: State = {
   loading: true,
   hasChanges: false,
   cvId: 'mockCV',
-  preview: { url: '' },
+  preview: { urls: [{ base64: '' }] },
 }
 
 describe('Sections Reducer', () => {
@@ -320,7 +320,7 @@ describe('Sections Reducer', () => {
         hasChanges: false,
         loading: true,
         preview: {
-          url: '',
+          urls: [{ base64: 'image' }],
         },
       },
       loadCV({
@@ -338,11 +338,11 @@ describe('Sections Reducer', () => {
     const state = reducer(
       mockCV,
       saveCV({
-        preview: { url: 'image' },
+        preview: { urls: [{ base64: 'image' }] },
       })
     )
     expect(state.hasChanges).toEqual(false)
-    expect(state.preview.url).toEqual('image')
+    expect(state.preview.urls).toEqual([{ base64: 'image' }])
   })
 
   test('Set field value', () => {

@@ -6,7 +6,7 @@ import { PreviewComponent } from './preview'
 
 describe('Preview', () => {
   test('should render cv preview', async () => {
-    render(<PreviewComponent url='' />)
+    render(<PreviewComponent source={{ urls: [{ base64: '' }]}} />)
     await waitFor(() => screen.getByRole('img'))
     expect(screen.getByRole('img')).toBeInTheDocument()
   })

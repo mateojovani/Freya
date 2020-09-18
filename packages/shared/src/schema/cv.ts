@@ -70,7 +70,7 @@ type Section = GenericSection<Field>
 
 type GQLSection = GenericSection<UnParsedField>
 
-type CVPreview = { url: string }
+type CVPreview = { urls: { base64: string }[] }
 
 interface CV {
   id: string

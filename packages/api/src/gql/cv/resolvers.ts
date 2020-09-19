@@ -3,7 +3,14 @@ import util from 'util'
 import path from 'path'
 import Handlebars from 'handlebars'
 import puppeteer from 'puppeteer'
-import { sectionTemplates, cv, CV, GQLSection, CVPreview } from 'freya-shared'
+import {
+  sectionTemplates,
+  cv,
+  CV,
+  GQLSection,
+  CVPreview,
+  cvPreview,
+} from 'freya-shared'
 import { fromBuffer } from 'pdf2pic'
 
 const readFile = util.promisify(fs.readFile)
@@ -24,22 +31,34 @@ const getCVPreview = async (): Promise<CVPreview> => {
   const compiledTemplate = Handlebars.compile(html)
   const template = compiledTemplate({ style, cv: mockCV.toTemplate() })
 
-  const browser = await puppeteer.launch({
-    ignoreDefaultArgs: ['--disable-extensions'],
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  })
-  const page = await browser.newPage()
-  await page.setContent(template)
-  const pdf = await page.pdf({ format: 'A4' })
-  const images = (await fromBuffer(pdf, {
-    quality: 80,
-    density: 290,
-    width: 1024,
-    height: 1268,
-  }).bulk(-1, true)) as { base64: string }[]
-  await browser.close()
+  try {
+    const browser = await puppeteer.launch({
+      ignoreDefaultArgs: ['--disable-extensions'],
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-gpu',
+        '--disable-dev-shm-usage',
+        '--proxy-server="direct://"',
+        '--proxy-bypass-list=*',
+      ],
+    })
+    const page = await browser.newPage()
+    await page.setContent(template)
+    const pdf = await page.pdf({ format: 'A4' })
+    const images = (await fromBuffer(pdf, {
+      quality: 80,
+      density: 290,
+      width: 1024,
+      height: 1268,
+    }).bulk(-1, true)) as { base64: string }[]
+    await browser.close()
 
-  return { urls: images }
+    return { urls: images }
+  } catch (error) {
+    console.error(error)
+    return cvPreview
+  }
 }
 
 let mockCV = { ...cv }

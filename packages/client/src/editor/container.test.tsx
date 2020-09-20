@@ -18,6 +18,7 @@ describe('Sections', () => {
   })
 
   test('should update the cv', async () => {
+    jest.useFakeTimers()
     renderWithStore(<ResumeEditor />, MemoryRouter)
     await waitFor(() => screen.getAllByText(/Personal information/i))
     userEvent.type(screen.getByLabelText(/First name/i), 'F')

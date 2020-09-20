@@ -1,68 +1,89 @@
 import * as React from 'react'
 import { FunctionComponent } from 'react'
-import { Button, Row } from 'antd'
+import { Button, Row, Tooltip } from 'antd'
 import styled from 'styled-components'
 import { CVPreview } from 'freya-shared'
-import { LeftOutlined, RightOutlined } from '@ant-design/icons'
+import {
+  LeftOutlined,
+  RightOutlined,
+  CheckCircleTwoTone,
+  SyncOutlined,
+} from '@ant-design/icons'
 
 interface PreviewProps {
+  isAutoSaved: boolean
   source: CVPreview
 }
 
 const Container = styled.div`
-  background: rgba(0, 0, 0, 0.65);
   padding: 5%;
   height: 100vh;
-  width: 100%;
+  margin: auto;
   display: flex;
   justify-content: center;
   flex-flow: column;
 `
 
-const Navigator = styled.div`
+const ActionRow = styled.div`
   display: flex;
   color: white;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const Navigator = styled.div`
+  display: flex;
 `
 
 export const PreviewComponent: FunctionComponent<PreviewProps> = ({
+  isAutoSaved,
   source,
 }) => {
   const [currentImage, setCurrentImage] = React.useState(0)
 
   return (
-    <Row>
+    <Row style={{ background: 'rgba(0, 0, 0, 0.65)' }}>
       <Container>
-        <Navigator>
-          <Button
-            type="link"
-            icon={
-              <div style={{ color: 'white' }}>
-                <LeftOutlined />
-              </div>
-            }
-            onClick={() => {
-              if (currentImage > 0) {
-                setCurrentImage(currentImage - 1)
+        <ActionRow>
+          <Navigator>
+            <Button
+              type="link"
+              icon={
+                <div style={{ color: 'white' }}>
+                  <LeftOutlined />
+                </div>
               }
-            }}
-          ></Button>
-          <div style={{ margin: '5px' }}>
-            {currentImage + 1}/{source.urls.length}
-          </div>
-          <Button
-            type="link"
-            icon={
-              <div style={{ color: 'white' }}>
-                <RightOutlined />
-              </div>
-            }
-            onClick={() => {
-              if (currentImage < source.urls.length - 1) {
-                setCurrentImage(currentImage + 1)
+              onClick={() => {
+                if (currentImage > 0) {
+                  setCurrentImage(currentImage - 1)
+                }
+              }}
+            ></Button>
+            <div style={{ margin: '5px' }}>
+              {currentImage + 1}/{source.urls.length}
+            </div>
+            <Button
+              type="link"
+              icon={
+                <div style={{ color: 'white' }}>
+                  <RightOutlined />
+                </div>
               }
-            }}
-          ></Button>
-        </Navigator>
+              onClick={() => {
+                if (currentImage < source.urls.length - 1) {
+                  setCurrentImage(currentImage + 1)
+                }
+              }}
+            ></Button>
+          </Navigator>
+          {isAutoSaved ? (
+            <Tooltip title="Changes saved" placement="left">
+              <CheckCircleTwoTone twoToneColor="#52c41a" />
+            </Tooltip>
+          ) : (
+            <SyncOutlined spin />
+          )}
+        </ActionRow>
 
         <img
           style={{ maxHeight: '100%', maxWidth: '100%' }}

@@ -47,8 +47,8 @@ const getCVPreview = async (): Promise<CVPreview> => {
     await page.setContent(template)
     const pdf = await page.pdf({ format: 'A4' })
     const images = (await fromBuffer(pdf, {
-      quality: 80,
-      density: 290,
+      quality: 60,
+      density: 250,
       width: 1024,
       height: 1268,
     }).bulk(-1, true)) as { base64: string }[]

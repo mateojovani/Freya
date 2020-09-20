@@ -64,6 +64,7 @@ export const ResumeEditor: FunctionComponent = () => {
   const params = useParams<{ id: string }>()
   const { response } = useQuery(cvQuery, { id: params.id })
   const [saveCVMut, { response: saveCVResp }] = useMutation(saveCVMutation)
+  let changesDebouce: number
 
   useEffect(() => {
     if (response) {
@@ -78,8 +79,9 @@ export const ResumeEditor: FunctionComponent = () => {
   }, [saveCVResp])
 
   useEffect(() => {
+    clearTimeout(changesDebouce)
     if (hasChanges) {
-      setTimeout(() => {
+      changesDebouce = setTimeout(() => {
         saveCVMut({
           cv: denormalize({
             cvId,
@@ -91,7 +93,11 @@ export const ResumeEditor: FunctionComponent = () => {
             loading,
           }),
         })
-      }, 500)
+      }, 3000)
+    }
+
+    return () => {
+      clearTimeout(changesDebouce)
     }
   }, [hasChanges, fields])
 
@@ -235,7 +241,7 @@ export const ResumeEditor: FunctionComponent = () => {
       </Col>
       <Col lg={{ span: 11, offset: 1 }} xl={{ span: 11, offset: 1 }} xxl={10}>
         <Affix offsetTop={0}>
-          <PreviewComponent source={preview} />
+          <PreviewComponent source={preview} isAutoSaved={!hasChanges} />
         </Affix>
       </Col>
     </Row>

@@ -7,7 +7,7 @@ import { createCVMutation } from 'freya-shared'
 
 export const Library = () => {
   const history = useHistory()
-  const [createCV, { response }] = useMutation(createCVMutation)
+  const [createCV, { response, isLoading }] = useMutation(createCVMutation)
 
   React.useEffect(() => {
     if (response) {
@@ -22,12 +22,14 @@ export const Library = () => {
     >
       <Button
         type="primary"
+        loading={isLoading}
         onClick={() => {
           createCV({ template: '' })
         }}
       >
         Get started
       </Button>
+      {isLoading ? <div>Generating your CV...</div> : null}
     </Empty>
   )
 }

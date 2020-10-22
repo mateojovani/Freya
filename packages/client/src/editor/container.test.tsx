@@ -1,6 +1,6 @@
 import * as React from 'react'
 import '@testing-library/jest-dom'
-import { screen, waitFor, waitForDomChange } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
 

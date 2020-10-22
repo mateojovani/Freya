@@ -83,5 +83,7 @@ const RichText: React.FunctionComponent<EditorProps> = ({ value }) => {
   )
 }
 
-export const renderEditor = (state: Node[]) =>
+const renderEditor = (state: Node[]) =>
   ReactDOMServer.renderToString(<RichText value={state} />)
+
+export { renderEditor }

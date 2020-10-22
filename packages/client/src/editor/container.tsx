@@ -62,7 +62,7 @@ export const ResumeEditor: FunctionComponent = () => {
     loading,
   } = useSelector<AppState, State>(({ sectionsView }) => sectionsView)
   const params = useParams<{ id: string }>()
-  const { response } = useQuery(cvQuery, { id: params.id })
+  const { response } = useQuery(cvQuery, { _id: params.id })
   const [saveCVMut, { response: saveCVResp }] = useMutation(saveCVMutation)
   let changesDebouce: number
 

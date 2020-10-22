@@ -16,7 +16,7 @@ const mockCV: State = {
   templates: {
     sections: [
       {
-        id: '306c6b69-666b-4690-b5fb-e372c6d94236',
+        _id: '306c6b69-666b-4690-b5fb-e372c6d94236',
         name: 'bio',
         title: 'Personal information',
         canMove: false,
@@ -88,7 +88,7 @@ const mockCV: State = {
         ],
       },
       {
-        id: '0fe069df-4b71-49d2-b638-e421106f2147',
+        _id: '0fe069df-4b71-49d2-b638-e421106f2147',
         name: 'experience',
         title: 'Work experience',
         canMove: true,
@@ -128,7 +128,7 @@ const mockCV: State = {
         ],
       },
       {
-        id: 'f45f2fe2-2949-43a4-82a9-20793ae336a0',
+        _id: 'f45f2fe2-2949-43a4-82a9-20793ae336a0',
         name: 'education',
         title: 'Education',
         canMove: true,

@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express'
 
 const cvTypes = gql`
   type Field {
-    id: String
+    _id: ID
     name: String!
     title: String!
     type: String!
@@ -11,7 +11,7 @@ const cvTypes = gql`
   }
 
   type Section {
-    id: ID!
+    _id: ID
     name: String!
     title: String!
     canMove: Boolean!
@@ -29,13 +29,13 @@ const cvTypes = gql`
   }
 
   type CV {
-    id: ID!
+    _id: ID!
     sections: [Section]!
     preview: CVPreview!
   }
 
   input FieldInput {
-    id: String
+    _id: String
     name: String!
     title: String!
     type: String!
@@ -44,7 +44,7 @@ const cvTypes = gql`
   }
 
   input SectionInput {
-    id: ID!
+    _id: ID!
     name: String!
     title: String!
     canMove: Boolean!
@@ -54,12 +54,12 @@ const cvTypes = gql`
   }
 
   input CVInput {
-    id: String!
+    _id: String!
     sections: [SectionInput]!
   }
 
   type Query {
-    cv(id: ID!): CV!
+    cv(_id: ID!): CV!
     sectionTemplates: [Section]!
   }
 

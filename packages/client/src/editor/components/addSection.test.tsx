@@ -11,7 +11,7 @@ const templates: {
 } = {
   sections: [
     {
-      id: 'bio',
+      _id: 'bio',
       name: 'bio',
       title: 'Personal information',
       canMove: false,
@@ -39,7 +39,7 @@ const templates: {
       ],
     },
     {
-      id: 'experience',
+      _id: 'experience',
       name: 'experience',
       title: 'Work experience',
       canMove: true,

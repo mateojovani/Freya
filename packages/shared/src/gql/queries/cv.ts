@@ -1,23 +1,23 @@
 import { gql } from 'graphql-request'
 
 const cvQuery = gql`
-  query GET_CV($id: ID!) {
-    cv(id: $id) {
-      id
+  query GET_CV($_id: ID!) {
+    cv(_id: $_id) {
+      _id
       preview {
         urls {
           base64
         }
       }
       sections {
-        id
+        _id
         name
         title
         canMove
         canRepeat
         addLabel
         fields {
-          id
+          _id
           name
           title
           type
@@ -27,7 +27,7 @@ const cvQuery = gql`
       }
     }
     sectionTemplates {
-      id
+      _id
       name
       title
       canMove

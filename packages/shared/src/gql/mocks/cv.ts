@@ -1,9 +1,9 @@
-import { uuid } from 'uuidv4'
+import { Types } from 'mongoose'
 import { CV, CVPreview } from '../../schema'
 import { sectionTemplates } from './sectionTemplates'
 
 const fieldsWithId = sectionTemplates[0].fields.map((secFlds) =>
-  secFlds.map((flds) => flds.map((fld) => ({ ...fld, id: uuid() })))
+  secFlds.map((flds) => flds.map((fld) => ({ ...fld, _id: Types.ObjectId().toHexString()})))
 )
 
 const cvPreview: CVPreview = {
@@ -15,7 +15,7 @@ const cvPreview: CVPreview = {
 }
 
 const cv: CV = {
-  id: uuid(),
+  _id: Types.ObjectId().toHexString(),
   sections: [
     {
       ...sectionTemplates[0],

@@ -3,6 +3,7 @@ import express from 'express'
 import cors from 'cors'
 
 import { connect } from './db'
+import { CV, SectionTemplate } from './models'
 import { combinedTypes } from './gql/combinedTypes'
 import { combinedResovers } from './gql/combinedResolvers'
 
@@ -12,6 +13,13 @@ app.use(cors())
 const server = new ApolloServer({
   typeDefs: combinedTypes,
   resolvers: combinedResovers,
+  context: ({ req }) => {
+    if (req) {
+      return {
+        models: { CV, SectionTemplate }
+      }
+    }
+  }
 })
 
 server.applyMiddleware({ app })

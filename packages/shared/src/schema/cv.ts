@@ -13,7 +13,7 @@ enum FieldType {
 }
 
 interface BasicField<T> {
-  id?: string
+  _id?: string
   name: string
   title: string
   type:
@@ -28,7 +28,7 @@ interface BasicField<T> {
 }
 
 interface RichTextField<T> {
-  id?: string
+  _id?: string
   name: string
   title: string
   type: FieldType.RichText
@@ -37,7 +37,7 @@ interface RichTextField<T> {
 }
 
 interface DateRangeField<T> {
-  id?: string
+  _id?: string
   name: string
   title: string
   type: FieldType.DateRange
@@ -56,7 +56,7 @@ type Field =
   | DateRangeField<[Moment, Moment]>
 
 interface GenericSection<T> {
-  id: string
+  _id?: string
   name: string
   title: string
   canMove: boolean
@@ -73,7 +73,7 @@ type GQLSection = GenericSection<UnParsedField>
 type CVPreview = { urls: { base64: string }[] }
 
 interface CV {
-  id: string
+  _id?: string
   sections: GQLSection[]
   preview: CVPreview
   toTemplate?: () => any

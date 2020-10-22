@@ -27,6 +27,7 @@
     "is-hotkey": "^0.1.6",
     "less": "^3.12.2",
     "moment": "^2.27.0",
+    "mongoose": "^5.10.0",
     "msw": "^0.20.5",
     "react": "^16.8.6",
     "react-beautiful-dnd": "^13.0.0",
@@ -36,8 +37,7 @@
     "slate": "^0.58.4",
     "slate-history": "^0.58.4",
     "slate-react": "^0.58.4",
-    "styled-components": "^5.1.1",
-    "uuidv4": "^6.2.2"
+    "styled-components": "^5.1.1"
   },
   "devDependencies": {
     "@parcel/transformer-less": "^2.0.0-alpha.3",

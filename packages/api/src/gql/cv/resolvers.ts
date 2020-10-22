@@ -3,19 +3,14 @@ import util from 'util'
 import path from 'path'
 import Handlebars from 'handlebars'
 import puppeteer from 'puppeteer'
-import {
-  sectionTemplates,
-  cv,
-  CV,
-  GQLSection,
-  CVPreview,
-  cvPreview,
-} from 'freya-shared'
+import { CV, GQLSection, CVPreview, cvPreview } from 'freya-shared'
 import { fromBuffer } from 'pdf2pic'
+import { Document, Model } from 'mongoose'
+import { seedCV, seedSectionTemplates } from '../../seed'
 
 const readFile = util.promisify(fs.readFile)
 
-const getCVPreview = async (): Promise<CVPreview> => {
+const getCVPreview = async (cv: CV): Promise<CVPreview> => {
   const templatePath = path.resolve(
     __dirname,
     '../../../../templates/luna/template.hbs'
@@ -29,7 +24,7 @@ const getCVPreview = async (): Promise<CVPreview> => {
     readFile(templateStylePath, 'utf8'),
   ])
   const compiledTemplate = Handlebars.compile(html)
-  const template = compiledTemplate({ style, cv: mockCV.toTemplate() })
+  const template = compiledTemplate({ style, cv: cv.toTemplate() })
 
   try {
     const browser = await puppeteer.launch({
@@ -61,43 +56,70 @@ const getCVPreview = async (): Promise<CVPreview> => {
   }
 }
 
-let mockCV = { ...cv }
+const seededSectionTemplates = seedSectionTemplates()
+const seededCV = seedCV()
+
+type CvResolver = (
+  _,
+  q: { _id: string },
+  ctx: { models: { CV: Model<Document> } }
+) => Promise<any>
+
+const getCV: CvResolver = async (_, { _id }, { models }) => {
+  return models.CV.findById(_id)
+}
+
+type SaveCvResolver = (
+  _,
+  q: { cv: CV },
+  ctx: { models: { CV: Model<Document> } }
+) => Promise<any>
+
+const saveCV: SaveCvResolver = async (_, { cv }, { models }) => {
+  const getTemplate = (name: string) =>
+    seededSectionTemplates.find((t) => t.name === name)
+
+  const updatedCV = {
+    ...cv,
+    sections: cv.sections.map((section, i) => {
+      return {
+        ...section,
+        toTemplate: getTemplate(section.name).toTemplate.bind(section),
+      }
+    }),
+  }
+  updatedCV.toTemplate = seededCV.toTemplate.bind(updatedCV),
+  updatedCV.preview = await getCVPreview(updatedCV)
+  await models.CV.findByIdAndUpdate(cv._id, updatedCV)
+
+  return updatedCV
+}
+
+type CreateCvResolver = (
+  _,
+  q: { template?: string },
+  ctx: { models: { CV: Model<Document> } }
+) => Promise<string>
+
+const createCV: CreateCvResolver = async (
+  _,
+  __,
+  { models }
+): Promise<string> => {
+  const cvTemplate = { ...seededCV, preview: await getCVPreview(seededCV) }
+  const { _id } = await new models.CV(cvTemplate).save()
+
+  return _id.toHexString()
+}
 
 const cvResolvers = {
   Query: {
-    cv: async (_, { id }: { id: string }): Promise<CV> => {
-      return { ...mockCV, preview: await getCVPreview() }
-    },
-    sectionTemplates: (): GQLSection[] => sectionTemplates,
+    cv: getCV,
+    sectionTemplates: (): GQLSection[] => seededSectionTemplates,
   },
   Mutation: {
-    saveCV: async (_, { cv }: { cv: CV }): Promise<CV> => {
-      const getTemplate = (name: string) =>
-        sectionTemplates.find((t) => t.name === name)
-
-      mockCV = {
-        ...mockCV,
-        preview: null,
-        sections: cv.sections.map((section, i) => {
-          return {
-            ...mockCV.sections[i],
-            ...section,
-            toTemplate: getTemplate(section.name).toTemplate.bind(section),
-          }
-        }),
-      }
-
-      mockCV.preview = await getCVPreview()
-
-      return mockCV
-    },
-    createCV: async (
-      _,
-      { template }: { template?: string }
-    ): Promise<string> => {
-      mockCV = { ...cv }
-      return mockCV.id
-    },
+    saveCV,
+    createCV,
   },
 }
 

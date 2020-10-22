@@ -1,10 +1,8 @@
-import { uuid } from 'uuidv4'
 import { FieldType, GQLSection } from '../../schema'
 import { renderEditor } from '../../editor'
 
 const sectionTemplates: GQLSection[] = [
   {
-    id: uuid(),
     name: 'bio',
     title: 'Personal information',
     canMove: false,
@@ -89,7 +87,6 @@ const sectionTemplates: GQLSection[] = [
     },
   },
   {
-    id: uuid(),
     name: 'experience',
     title: 'Work experience',
     canMove: true,
@@ -169,7 +166,6 @@ const sectionTemplates: GQLSection[] = [
     },
   },
   {
-    id: uuid(),
     name: 'education',
     title: 'Education',
     canMove: true,

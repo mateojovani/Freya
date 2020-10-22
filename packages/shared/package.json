@@ -9,12 +9,12 @@
     "graphql": "^15.3.0",
     "graphql-request": "^3.0.0",
     "moment": "^2.27.0",
+    "mongoose": "^5.10.0",
     "msw": "^0.20.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "slate": "^0.58.4",
-    "slate-react": "^0.58.4",
-    "uuidv4": "^6.2.3"
+    "slate-react": "^0.58.4"
   },
   "scripts": {
     "build": "tsc --build"

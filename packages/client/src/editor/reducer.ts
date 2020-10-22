@@ -1,5 +1,5 @@
+import { Types } from 'mongoose'
 import produce, { Draft } from 'immer'
-import { uuid } from 'uuidv4'
 import {
   Field,
   CV,
@@ -56,28 +56,28 @@ const normalize = (cv: CV, sectionTemplates: GQLSection[]): State => {
 
   const sectionsAndFields = cv.sections.reduce(
     ({ sections, fields }, section) => {
-      sections.byId[section.id] = {
+      sections.byId[section._id] = {
         ...section,
         fields: section.fields.map((sectionFields) =>
           sectionFields.map((flds) =>
             flds.map((fld) => {
-              fields.allIds.push(fld.id)
-              fields.byId[fld.id] = {
+              fields.allIds.push(fld._id)
+              fields.byId[fld._id] = {
                 ...fld,
                 value: JSON.parse(fld.value),
                 defaultValue: JSON.parse(fld.defaultValue),
               }
-              return fld.id
+              return fld._id
             })
           )
         ),
       }
       if (section.canMove) {
-        sections.nonFixedIds.push(section.id)
+        sections.nonFixedIds.push(section._id)
       } else {
-        sections.fixedIds.push(section.id)
+        sections.fixedIds.push(section._id)
       }
-      sections.allIds.push(section.id)
+      sections.allIds.push(section._id)
       return { sections, fields }
     },
     { sections, fields }
@@ -98,9 +98,9 @@ const normalize = (cv: CV, sectionTemplates: GQLSection[]): State => {
           )
         ),
       })),
-      inUse: sectionsAndFields.sections.allIds,
+      inUse: sectionsAndFields.sections.allIds.map(id => sectionsAndFields.sections.byId[id].name),
     },
-    cvId: cv.id,
+    cvId: cv._id,
     preview: cv.preview,
     hasChanges: false,
     loading: true,
@@ -113,14 +113,14 @@ export const denormalize = (state: State): Partial<CV> => {
 
     return {
       ...section,
-      id,
+      _id: id,
       fields: section.fields.map((subSection) =>
         subSection.map((row) =>
           row.map((fieldId) => {
             const field = state.fields.byId[fieldId]
             return {
               ...field,
-              id: fieldId,
+              _id: fieldId,
               value: JSON.stringify(field.value),
               defaultValue: JSON.stringify(field.defaultValue),
             }
@@ -131,7 +131,7 @@ export const denormalize = (state: State): Partial<CV> => {
   }
 
   return {
-    id: state.cvId,
+    _id: state.cvId,
     sections: [
       ...state.sections.fixedIds.map(getSection),
       ...state.sections.nonFixedIds.map(getSection),
@@ -170,18 +170,18 @@ export default produce(
       }
       case 'ADD_SECTION': {
         const { templateIndex } = action.payload
-        const sectionId = uuid()
+        const sectionId = Types.ObjectId().toHexString()
         const template = draft.templates.sections[templateIndex]
-        draft.templates.inUse.push(template.id)
+        draft.templates.inUse.push(template.name)
         draft.sections.byId[sectionId] = {
           ...template,
           fields: template.fields.map((row) =>
             row.map((fields) =>
               fields.map((field) => {
-                const fieldId = uuid()
+                const fieldId = Types.ObjectId().toHexString()
                 draft.fields.byId[fieldId] = {
                   ...field,
-                  id: fieldId,
+                  _id: fieldId,
                 }
                 draft.fields.allIds.push(fieldId)
                 return fieldId
@@ -214,7 +214,7 @@ export default produce(
         const sectionFields = section.fields[mirrorRowIdx]
         const repeated = sectionFields.map((row) =>
           row.map((mirrorFieldId) => {
-            const fieldId = uuid()
+            const fieldId = Types.ObjectId().toHexString()
             const mirrorField: Field = draft.fields.byId[mirrorFieldId]
             //@ts-ignore
             draft.fields.byId[fieldId] = {

@@ -42,7 +42,7 @@ export const AddSectionComponent: React.FunctionComponent<AddSectionProps> = ({
               <Button
                 block={true}
                 type="dashed"
-                disabled={templates.inUse.some((id) => template.id === id)}
+                disabled={templates.inUse.some((name) => template.name === name)}
                 onClick={() => {
                   addSection(i)
                   setModalOpen(false)

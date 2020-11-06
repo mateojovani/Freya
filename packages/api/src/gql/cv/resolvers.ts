@@ -10,6 +10,13 @@ import { seedCV, seedSectionTemplates } from '../../seed'
 
 const readFile = util.promisify(fs.readFile)
 
+Handlebars.registerHelper('isLast', function (index, array, options) {
+  if (index === array.length - 1) {
+    return options.fn(this)
+  }
+  return options.inverse(this)
+})
+
 const getCVPreview = async (cv: CV): Promise<CVPreview> => {
   const templatePath = path.resolve(
     __dirname,
@@ -88,8 +95,8 @@ const saveCV: SaveCvResolver = async (_, { cv }, { models }) => {
       }
     }),
   }
-  updatedCV.toTemplate = seededCV.toTemplate.bind(updatedCV),
-  updatedCV.preview = await getCVPreview(updatedCV)
+  ;(updatedCV.toTemplate = seededCV.toTemplate.bind(updatedCV)),
+    (updatedCV.preview = await getCVPreview(updatedCV))
   await models.CV.findByIdAndUpdate(cv._id, updatedCV)
 
   return updatedCV

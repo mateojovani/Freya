@@ -1,9 +1,27 @@
-import {
-  GQLSection,
-  CV,
-  FieldType,
-  renderEditor,
-} from 'freya-shared'
+const moment = require('moment')
+import { GQLSection, CV, FieldType, renderEditor } from 'freya-shared'
+
+function dateRangeParser(field) {
+  const value = JSON.parse(field.value)
+  if (!value) {
+    return []
+  }
+
+  const [start, end] = value
+  const range = []
+  if (start) {
+    range.push(moment(start).format('MMMM YYYY'))
+  } else {
+    return range
+  }
+  if (end) {
+    range.push(moment(end).format('MMMM YYYY'))
+  } else {
+    range.push('Present')
+  }
+
+  return range
+}
 
 function seedSectionTemplates(): GQLSection[] {
   return [
@@ -159,12 +177,21 @@ function seedSectionTemplates(): GQLSection[] {
           subSection
             .flatMap((row) => row.flatMap((fields) => fields))
             .reduce((acc, field) => {
-              if (field.type === 'richtext') {
-                const editor = renderEditor(JSON.parse(field.value))
-                acc[field.name] = editor
-                return acc
+              switch (field.type) {
+                case 'richtext': {
+                  const editor = renderEditor(JSON.parse(field.value))
+                  acc[field.name] = editor
+                  break
+                }
+                case 'date-range': {
+                  acc[field.name] = dateRangeParser(field)
+                  break
+                }
+                default: {
+                  acc[field.name] = JSON.parse(field.value)
+                  break
+                }
               }
-              acc[field.name] = JSON.parse(field.value)
               return acc
             }, {})
         )
@@ -238,12 +265,21 @@ function seedSectionTemplates(): GQLSection[] {
           subSection
             .flatMap((row) => row.flatMap((fields) => fields))
             .reduce((acc, field) => {
-              if (field.type === 'richtext') {
-                const editor = renderEditor(JSON.parse(field.value))
-                acc[field.name] = editor
-                return acc
+              switch (field.type) {
+                case 'richtext': {
+                  const editor = renderEditor(JSON.parse(field.value))
+                  acc[field.name] = editor
+                  break
+                }
+                case 'date-range': {
+                  acc[field.name] = dateRangeParser(field)
+                  break
+                }
+                default: {
+                  acc[field.name] = JSON.parse(field.value)
+                  break
+                }
               }
-              acc[field.name] = JSON.parse(field.value)
               return acc
             }, {})
         )

@@ -15,7 +15,7 @@ const GetStarted = () => {
     }
   }, [response])
 
-  const onFinish = (values?) => {
+  const onFinish = (values = { firstname: '', lastname: '' }) => {
     createCV({
       input: { firstName: values.firstname, lastName: values.lastname },
     })

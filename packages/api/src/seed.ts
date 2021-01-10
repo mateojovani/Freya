@@ -1,11 +1,29 @@
-import {
-  GQLSection,
-  CV,
-  FieldType,
-  renderEditor,
-} from 'freya-shared'
+const moment = require('moment')
+import { GQLSection, CV, FieldType, renderEditor } from 'freya-shared'
 
-function seedSectionTemplates(): GQLSection[] {
+function dateRangeParser(field) {
+  const value = JSON.parse(field.value)
+  if (!value) {
+    return []
+  }
+
+  const [start, end] = value
+  const range = []
+  if (start) {
+    range.push(moment(start).format('MMMM YYYY'))
+  } else {
+    return range
+  }
+  if (end) {
+    range.push(moment(end).format('MMMM YYYY'))
+  } else {
+    range.push('Present')
+  }
+
+  return range
+}
+
+function seedSectionTemplates({firstName = '', lastName = ''}): GQLSection[] {
   return [
     {
       name: 'bio',
@@ -20,14 +38,14 @@ function seedSectionTemplates(): GQLSection[] {
               name: 'firstName',
               title: 'First name',
               type: FieldType.Text,
-              value: JSON.stringify(''),
+              value: JSON.stringify(firstName),
               defaultValue: JSON.stringify(''),
             },
             {
               name: 'lastName',
               title: 'Last name',
               type: FieldType.Text,
-              value: JSON.stringify(''),
+              value: JSON.stringify(lastName),
               defaultValue: JSON.stringify(''),
             },
           ],
@@ -159,12 +177,21 @@ function seedSectionTemplates(): GQLSection[] {
           subSection
             .flatMap((row) => row.flatMap((fields) => fields))
             .reduce((acc, field) => {
-              if (field.type === 'richtext') {
-                const editor = renderEditor(JSON.parse(field.value))
-                acc[field.name] = editor
-                return acc
+              switch (field.type) {
+                case 'richtext': {
+                  const editor = renderEditor(JSON.parse(field.value))
+                  acc[field.name] = editor
+                  break
+                }
+                case 'date-range': {
+                  acc[field.name] = dateRangeParser(field)
+                  break
+                }
+                default: {
+                  acc[field.name] = JSON.parse(field.value)
+                  break
+                }
               }
-              acc[field.name] = JSON.parse(field.value)
               return acc
             }, {})
         )
@@ -238,12 +265,21 @@ function seedSectionTemplates(): GQLSection[] {
           subSection
             .flatMap((row) => row.flatMap((fields) => fields))
             .reduce((acc, field) => {
-              if (field.type === 'richtext') {
-                const editor = renderEditor(JSON.parse(field.value))
-                acc[field.name] = editor
-                return acc
+              switch (field.type) {
+                case 'richtext': {
+                  const editor = renderEditor(JSON.parse(field.value))
+                  acc[field.name] = editor
+                  break
+                }
+                case 'date-range': {
+                  acc[field.name] = dateRangeParser(field)
+                  break
+                }
+                default: {
+                  acc[field.name] = JSON.parse(field.value)
+                  break
+                }
               }
-              acc[field.name] = JSON.parse(field.value)
               return acc
             }, {})
         )
@@ -252,9 +288,9 @@ function seedSectionTemplates(): GQLSection[] {
   ]
 }
 
-function seedCV(): CV {
+function seedCV({firstName = '', lastName = ''}): CV {
   return {
-    sections: [seedSectionTemplates()[0]],
+    sections: [seedSectionTemplates({firstName, lastName})[0]],
     preview: {
       urls: [
         {

@@ -32,6 +32,7 @@ const cvTypes = gql`
     _id: ID!
     sections: [Section]!
     preview: CVPreview!
+    userId: ID
   }
 
   input FieldInput {
@@ -58,14 +59,22 @@ const cvTypes = gql`
     sections: [SectionInput]!
   }
 
+  input CreateCVInput {
+    template: String
+    firstName: String
+    lastName: String
+  }
+
   type Query {
     cv(_id: ID!): CV!
+    cvs: [CV]
     sectionTemplates: [Section]!
   }
 
   type Mutation {
+    saveCVForAccount(id: String!): ID
     saveCV(cv: CVInput!): CV
-    createCV(template: String): ID
+    createCV(input: CreateCVInput): ID
   }
 `
 

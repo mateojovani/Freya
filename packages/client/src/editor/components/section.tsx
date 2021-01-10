@@ -1,4 +1,4 @@
-import moment = require('moment')
+const moment = require('moment')
 import * as React from 'react'
 import { FunctionComponent, useCallback } from 'react'
 import { Row, Col, Form, Input, Button, DatePicker } from 'antd'

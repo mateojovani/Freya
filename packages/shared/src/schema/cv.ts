@@ -74,6 +74,7 @@ type CVPreview = { urls: { base64: string }[] }
 
 interface CV {
   _id?: string
+  userId?: string
   sections: GQLSection[]
   preview: CVPreview
   toTemplate?: () => any

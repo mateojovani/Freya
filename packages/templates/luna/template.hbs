@@ -718,20 +718,23 @@
       background: #222;
     }
 
-    .job, .education {
+    .job,
+    .education {
       position: relative;
       margin-bottom: 1em;
       padding-bottom: 1em;
       border-bottom: 1px solid #ccc;
     }
 
-    .job h4, .education h4 {
+    .job h4,
+    .education h4 {
       position: absolute;
       top: 0.35em;
       right: 0;
     }
 
-    .job p, .education p {
+    .job p,
+    .education p {
       margin: 0.75em 0 3em 0;
     }
 
@@ -874,7 +877,6 @@
             <!--// .yui-gf-->
 
             <div class="yui-gf">
-
               <div class="yui-u first">
                 <h2>Experience</h2>
               </div>
@@ -882,57 +884,65 @@
 
               <div class="yui-u">
                 {{#each cv.experience}}
-                <div class="job">
-                  <!-- last -->
-                  <h2>{{this.company}}</h2>
-                  <h3>{{this.job_title}}</h3>
-                  <h4> {{#each this.start_end_date}} {{#if @index }} - {{/if}} {{this}} {{/each}}</h4>
-                  <p>{{{this.job_desc}}}</p>
+                {{#isLast @index ../cv.experience}}
+                <div class="job last">
+                  {{else}}
+                  <div class="job">
+                    {{/isLast}}
+                    <h2>{{this.company}}</h2>
+                    <h3>{{this.job_title}}</h3>
+                    <h4> {{#each this.start_end_date}} {{#if @index }} - {{/if}} {{this}} {{/each}}</h4>
+                    <p>{{{this.job_desc}}}</p>
+                  </div>
+                  {{/each}}
                 </div>
-                {{/each}}
+                <!--// .yui-u -->
               </div>
-              <!--// .yui-u -->
-            </div>
-            <!--// .yui-gf -->
+              <!--// .yui-gf -->
 
 
-            <div class="yui-gf last">
-              <div class="yui-u first">
-                <h2>Education</h2>
-              </div>
-              <div class="yui-u">
-                {{#each cv.education}}
-                <div class="education">
-                  <h2>{{this.school}}</h2>
-                  <h3>{{this.degree}}</h3>
-                  <h4> {{#each this.sc_start_end_date}} {{#if @index }} - {{/if}} {{this}} {{/each}}</h4>
-                  <p>{{{this.sc_desc}}}</p>
+              <div class="yui-gf last">
+                <div class="yui-u first">
+                  <h2>Education</h2>
                 </div>
-                {{/each}}
+                <div class="yui-u">
+                  {{#each cv.education}}
+                  {{#isLast @index ../cv.education}}
+                  <div class="education last">
+                    {{else}}
+                    <div class="education">
+                      {{/isLast}}
+                      <h2>{{this.school}}</h2>
+                      <h3>{{this.degree}}</h3>
+                      <h4> {{#each this.sc_start_end_date}} {{#if @index }} - {{/if}} {{this}} {{/each}}</h4>
+                      <p>{{{this.sc_desc}}}</p>
+                    </div>
+                    {{/each}}
+                  </div>
+                </div>
+                <!--// .yui-gf -->
+
+
               </div>
+              <!--// .yui-b -->
             </div>
-            <!--// .yui-gf -->
-
-
+            <!--// yui-main -->
           </div>
-          <!--// .yui-b -->
-        </div>
-        <!--// yui-main -->
+          <!--// bd -->
+
+          <div id="ft">
+            <p>{{ cv.bio.firstName }} {{ cv.bio.lastName }} {{#if cv.bio.firstName }} &mdash; {{/if}} <a
+                href="mailto:name@yourdomain.com">{{ cv.bio.email }}</a> {{#if cv.bio.email }} &mdash; {{/if}}
+              {{ cv.bio.phone }}
+            </p>
+          </div>
+          <!--// footer -->
+
+        </div><!-- // inner -->
+
+
       </div>
-      <!--// bd -->
-
-      <div id="ft">
-        <p>{{ cv.bio.firstName }} {{ cv.bio.lastName }} &mdash; <a
-            href="mailto:name@yourdomain.com">{{ cv.bio.email }}</a> &mdash; {{ cv.bio.phone }}
-        </p>
-      </div>
-      <!--// footer -->
-
-    </div><!-- // inner -->
-
-
-  </div>
-  <!--// doc -->
+      <!--// doc -->
 
 
 </body>

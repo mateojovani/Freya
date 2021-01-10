@@ -15,7 +15,10 @@ const server = new ApolloServer({
   resolvers: combinedResovers,
   context: ({ req }) => {
     if (req) {
+      const { authorization: token } = req.headers
+
       return {
+        token,
         models: { CV, SectionTemplate }
       }
     }

@@ -30,6 +30,7 @@ const CvSchema = new Schema<CV>(
   {
     sections: [SectionSchema],
     preview: PreviewSchema,
+    userId: String
   },
   {
     timestamps: true,

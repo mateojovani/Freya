@@ -4,6 +4,7 @@ const cvQuery = gql`
   query GET_CV($_id: ID!) {
     cv(_id: $_id) {
       _id
+      userId
       preview {
         urls {
           base64
@@ -44,6 +45,19 @@ const cvQuery = gql`
   }
 `
 
+const cvsQuery = gql`
+  query GET_CVS {
+    cvs {
+      _id
+      preview {
+        urls {
+          base64
+        }
+      }
+    }
+  }
+`
+
 const saveCVMutation = gql`
   mutation SAVE_CV($cv: CVInput!) {
     saveCV(cv: $cv) {
@@ -56,10 +70,22 @@ const saveCVMutation = gql`
   }
 `
 
-const createCVMutation = gql`
-  mutation CREATE_CV($template: String) {
-    createCV(template: $template)
+const saveCVForAccountMutation = gql`
+  mutation SAVE_CV_ACCOUNT($id: String!) {
+    saveCVForAccount(id: $id)
   }
 `
 
-export { cvQuery, saveCVMutation, createCVMutation }
+const createCVMutation = gql`
+  mutation CREATE_CV($input: CreateCVInput) {
+    createCV(input: $input)
+  }
+`
+
+export {
+  cvQuery,
+  cvsQuery,
+  saveCVMutation,
+  createCVMutation,
+  saveCVForAccountMutation,
+}

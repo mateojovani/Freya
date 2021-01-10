@@ -10,9 +10,9 @@ describe('Main', () => {
   test('dashboard', async () => {
     const { container } = renderWithStore(<Main />, MemoryRouter)
     await waitFor(() => [
-      screen.getByText(/Get started/i)
+      screen.getByText(/Before we get you going/i)
     ])
     expect(container).toBeInTheDocument()
-    expect(screen.getByText(/Get started/i)).toBeInTheDocument()
+    expect(screen.getByText(/Before we get you going/i)).toBeInTheDocument()
   })
 })

@@ -16,6 +16,7 @@
     "docker": "docker-compose up -d"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.0",
     "concurrently": "^5.3.0",
     "dotenv": "^8.2.0",
     "nodemon": "^2.0.4",
@@ -29,6 +30,8 @@
     "express": "^4.17.1",
     "graphql": "^15.3.0",
     "handlebars": "^4.7.6",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^1.11.0",
     "mongoose": "^5.10.0",
     "pdf2pic": "^2.1.0",
     "puppeteer": "^5.2.1",

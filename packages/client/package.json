@@ -12,12 +12,14 @@
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch",
     "prettify": "prettier --write './src/**/*.{ts,tsx}'",
-    "storybook": "parcel ./storybook.html --port 1337"
+    "storybook": "parcel ./storybook.html --port 1337",
+    "postinstall": "sed -i.bak 's_\"//# sourceMappingURL=\"_\"//# source\"+\"MappingURL=\"_' ../../node_modules/@auth0/auth0-react/dist/*.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
+    "@auth0/auth0-react": "^1.2.0",
     "@reduxjs/toolkit": "^1.4.0",
     "@types/react-router-dom": "^5.1.5",
     "@types/styled-components": "^5.1.2",

@@ -82,10 +82,17 @@ const createCVMutation = gql`
   }
 `
 
+const downloadCVMutation = gql`
+  mutation DOWNLOAD_CV($id: String!) {
+    downloadCV(id: $id)
+  }
+`
+
 export {
   cvQuery,
   cvsQuery,
   saveCVMutation,
   createCVMutation,
   saveCVForAccountMutation,
+  downloadCVMutation,
 }

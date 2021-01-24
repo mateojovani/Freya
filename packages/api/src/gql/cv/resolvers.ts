@@ -3,9 +3,11 @@ import util from 'util'
 import path from 'path'
 import Handlebars from 'handlebars'
 import puppeteer from 'puppeteer'
+import AWS from 'aws-sdk'
 import { CV, GQLSection, CVPreview, cvPreview } from 'freya-shared'
 import { fromBuffer } from 'pdf2pic'
 import { Document, Model } from 'mongoose'
+
 import { seedCV, seedSectionTemplates } from '../../seed'
 import { isTokenValid } from '../../auth'
 
@@ -18,7 +20,7 @@ Handlebars.registerHelper('isLast', function (index, array, options) {
   return options.inverse(this)
 })
 
-const getCVPreview = async (cv: CV): Promise<CVPreview> => {
+const compileCVAsPDF = async (cv: CV): Promise<Buffer> => {
   const templatePath = path.resolve(
     __dirname,
     '../../../../templates/luna/template.hbs'
@@ -49,13 +51,24 @@ const getCVPreview = async (cv: CV): Promise<CVPreview> => {
     const page = await browser.newPage()
     await page.setContent(template)
     const pdf = await page.pdf({ format: 'A4' })
+    await browser.close()
+
+    return pdf
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
+const getCVPreview = async (cv: CV): Promise<CVPreview> => {
+  try {
+    const pdf = await compileCVAsPDF(cv)
     const images = (await fromBuffer(pdf, {
       quality: 60,
       density: 250,
       width: 1024,
       height: 1268,
     }).bulk(-1, true)) as { base64: string }[]
-    await browser.close()
 
     return { urls: images }
   } catch (error) {
@@ -64,8 +77,31 @@ const getCVPreview = async (cv: CV): Promise<CVPreview> => {
   }
 }
 
+const storeCVPDF = async (cv: CV): Promise<any> => {
+  try {
+    const s3URL = process.env.S3_BUCKET_URL
+    const objId = `${cv._id}.pdf`
+    const pdf = await compileCVAsPDF(cv)
+    await new AWS.S3()
+      .putObject({
+        Bucket: 'freya-cv',
+        Key: objId,
+        Body: pdf,
+        ACL: 'public-read',
+      })
+      .promise()
+
+    return `${s3URL}${objId}`
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
 const seededCV = seedCV({})
 const seededSectionTemplates = seedSectionTemplates({})
+const getTemplate = (name: string) =>
+  seededSectionTemplates.find((t) => t.name === name)
 
 type CvResolver = (
   _,
@@ -121,9 +157,6 @@ type SaveCvResolver = (
 ) => Promise<any>
 
 const saveCV: SaveCvResolver = async (_, { cv }, { models }) => {
-  const getTemplate = (name: string) =>
-    seededSectionTemplates.find((t) => t.name === name)
-
   const updatedCV = {
     ...cv,
     sections: cv.sections.map((section, i) => {
@@ -138,6 +171,41 @@ const saveCV: SaveCvResolver = async (_, { cv }, { models }) => {
   await models.CV.findByIdAndUpdate(cv._id, updatedCV)
 
   return updatedCV
+}
+
+type DownloadCvResolver = (
+  _,
+  q: { id: string },
+  ctx: { models: { CV: Model<Document> }; token: string }
+) => Promise<string>
+
+const downloadCV: DownloadCvResolver = async (_, { id }, { models, token }) => {
+  if (token) {
+    const { error, decoded } = await isTokenValid(token)
+
+    if (error) {
+      throw new Error(error)
+    }
+
+    if (decoded) {
+      const cv = await models.CV.findById(id).exec()
+      cv['_id'] = cv._id.toHexString()
+      cv['sections'].forEach((section) => {
+        section['toTemplate'] = getTemplate(section.name).toTemplate.bind(
+          section
+        )
+      })
+      cv['toTemplate'] = seededCV.toTemplate.bind(cv)
+      if (cv['userId'] && cv['userId'] === decoded.sub) {
+        // @ts-ignore
+        return storeCVPDF(cv)
+      }
+
+      throw new Error('Unauthorised!')
+    }
+  }
+
+  throw new Error('Unauthorised!')
 }
 
 type SaveCvForAccountResolver = (
@@ -213,6 +281,7 @@ const cvResolvers = {
   },
   Mutation: {
     saveCV,
+    downloadCV,
     saveCVForAccount,
     createCV,
   },

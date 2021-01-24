@@ -74,6 +74,7 @@ const cvTypes = gql`
   type Mutation {
     saveCVForAccount(id: String!): ID
     saveCV(cv: CVInput!): CV
+    downloadCV(id: String!): String
     createCV(input: CreateCVInput): ID
   }
 `

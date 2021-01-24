@@ -26,6 +26,7 @@
     "@types/mongoose": "^5.7.36",
     "@types/puppeteer": "^3.0.1",
     "apollo-server-express": "^2.16.1",
+    "aws-sdk": "^2.828.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "graphql": "^15.3.0",

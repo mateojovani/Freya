@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Layout, Button } from 'antd'
-import { client } from 'freya-shared'
+import { Layout, Button, Tooltip } from 'antd'
+import { client, downloadCVMutation } from 'freya-shared'
 import {
   BrowserRouter as Router,
   Switch,
@@ -10,6 +10,7 @@ import {
   Redirect,
 } from 'react-router-dom'
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react'
+import { CloudDownloadOutlined } from '@ant-design/icons'
 
 import { AppHeader } from '../header/container'
 import { LibraryComponent } from '../library/container'
@@ -17,6 +18,7 @@ import { ResumeEditor } from '../editor/container'
 import { GetStarted } from '../get-started/container'
 import { ManageAccountComponent } from '../header/components/manageAccount'
 import { Save } from '../save/container'
+import { useMutation, useQuery } from '../utils'
 
 const ProtectedResumeEditor = withAuthenticationRequired(ResumeEditor)
 
@@ -51,6 +53,34 @@ const AppHeaderWithSaveCV: React.FunctionComponent = () => {
   )
 }
 
+const DownloadCV: React.FunctionComponent = () => {
+  const params = useParams<{ id: string }>()
+  const [downloadCV, { response, isLoading }] = useMutation(downloadCVMutation)
+
+  React.useEffect(() => {
+    if (response && response.downloadCV) {
+      const link = document.createElement('a')
+      link.target = '_blank'
+      link.href = response.downloadCV
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+  }, [response])
+
+  return (
+    <Tooltip title="Download as PDF">
+      <Button
+        style={{ marginLeft: '10px' }}
+        icon={<CloudDownloadOutlined />}
+        onClick={() => {
+          downloadCV({ id: params.id })
+        }}
+      />
+    </Tooltip>
+  )
+}
+
 const Header = () => {
   const history = useHistory()
   const { logout } = useAuth0()
@@ -67,7 +97,12 @@ const Header = () => {
         <AppHeader
           subTitle="Resume editor"
           onBack={() => history.push('/')}
-          action={[<ManageAccountComponent onLogout={logout} key="1" />]}
+          action={[
+            <div key="1">
+              <ManageAccountComponent onLogout={logout} />
+              <DownloadCV />
+            </div>,
+          ]}
         />
       </Route>
       <Route path="/start/:id">
